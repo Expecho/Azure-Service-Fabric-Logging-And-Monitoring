@@ -29,6 +29,8 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ActorDemo\ActorDemo.csproj" />
+    <ProjectReference Include="..\StatefulDemo\StatefulDemo.csproj" />
     <ProjectReference Include="..\StatelessDemo\StatelessDemo.csproj" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" />

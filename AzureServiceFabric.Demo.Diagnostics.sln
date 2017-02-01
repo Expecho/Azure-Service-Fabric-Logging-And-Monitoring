@@ -7,6 +7,12 @@ Project("{A07B5EB6-E848-4116-A8D0-A826331D98C6}") = "AzureServiceFabric.Demo.Dia
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StatelessDemo", "StatelessDemo\StatelessDemo.csproj", "{D831E64E-5CE1-472F-B441-D344CF63BC69}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StatefulDemo", "StatefulDemo\StatefulDemo.csproj", "{E70FFF0C-7C85-4FDB-9363-039C3CB3D99F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ActorDemo", "ActorDemo\ActorDemo.csproj", "{F615B315-2EF7-4E88-B6CB-90095237D084}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ActorDemo.Interfaces", "ActorDemo.Interfaces\ActorDemo.Interfaces.csproj", "{4F75BB52-A227-4785-84DB-0720A58FC1F8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -23,6 +29,18 @@ Global
 		{D831E64E-5CE1-472F-B441-D344CF63BC69}.Debug|x64.Build.0 = Debug|x64
 		{D831E64E-5CE1-472F-B441-D344CF63BC69}.Release|x64.ActiveCfg = Release|x64
 		{D831E64E-5CE1-472F-B441-D344CF63BC69}.Release|x64.Build.0 = Release|x64
+		{E70FFF0C-7C85-4FDB-9363-039C3CB3D99F}.Debug|x64.ActiveCfg = Debug|x64
+		{E70FFF0C-7C85-4FDB-9363-039C3CB3D99F}.Debug|x64.Build.0 = Debug|x64
+		{E70FFF0C-7C85-4FDB-9363-039C3CB3D99F}.Release|x64.ActiveCfg = Release|x64
+		{E70FFF0C-7C85-4FDB-9363-039C3CB3D99F}.Release|x64.Build.0 = Release|x64
+		{F615B315-2EF7-4E88-B6CB-90095237D084}.Debug|x64.ActiveCfg = Debug|x64
+		{F615B315-2EF7-4E88-B6CB-90095237D084}.Debug|x64.Build.0 = Debug|x64
+		{F615B315-2EF7-4E88-B6CB-90095237D084}.Release|x64.ActiveCfg = Release|x64
+		{F615B315-2EF7-4E88-B6CB-90095237D084}.Release|x64.Build.0 = Release|x64
+		{4F75BB52-A227-4785-84DB-0720A58FC1F8}.Debug|x64.ActiveCfg = Debug|x64
+		{4F75BB52-A227-4785-84DB-0720A58FC1F8}.Debug|x64.Build.0 = Debug|x64
+		{4F75BB52-A227-4785-84DB-0720A58FC1F8}.Release|x64.ActiveCfg = Release|x64
+		{4F75BB52-A227-4785-84DB-0720A58FC1F8}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
