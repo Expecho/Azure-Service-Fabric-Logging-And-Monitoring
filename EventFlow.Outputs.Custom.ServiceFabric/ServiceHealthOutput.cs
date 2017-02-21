@@ -51,7 +51,7 @@ namespace EventFlow.Outputs.Custom.ServiceFabric
                     Guid partitionId;
                     if (EventDataValidator.TryGetServiceContext(eventData, out replicaOrInstanceId, out partitionId))
                     {
-                        healthReporter.ReportProblem($"{nameof(ServiceHealthOutput<T>)} skipped an event due to missing metadata.",
+                        healthReporter.ReportWarning($"{nameof(ServiceHealthOutput<T>)} skipped an event due to missing metadata.",
                             EventFlowContextIdentifiers.Configuration);
                         continue;
                     }
@@ -65,7 +65,7 @@ namespace EventFlow.Outputs.Custom.ServiceFabric
                 }
                 catch (Exception ex)
                 {
-                    healthReporter.ReportProblem($"{nameof(ServiceHealthOutput<T>)} dropped an event due to error: {ex.Message}.",
+                    healthReporter.ReportWarning($"{nameof(ServiceHealthOutput<T>)} dropped an event due to error: {ex.Message}.",
                         EventFlowContextIdentifiers.Configuration);
                     throw;
                 }
