@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Interface;
+using System;
 using System.Collections.Generic;
 using System.Fabric;
 using System.Threading;
@@ -11,7 +12,7 @@ namespace StatelessDemo
     /// <summary>
     /// An instance of this class is created for each service instance by the Service Fabric runtime.
     /// </summary>
-    internal sealed class StatelessDemo : StatelessService
+    internal sealed class StatelessDemo : StatelessService, IStatelessDemo
     {
         public StatelessDemo(StatelessServiceContext context)
             : base(context)
@@ -45,6 +46,11 @@ namespace StatelessDemo
 
                 await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
             }
+        }
+
+        public string HelloWorld()
+        {
+            return "Hello World";
         }
     }
 }
