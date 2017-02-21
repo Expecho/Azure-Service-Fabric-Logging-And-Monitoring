@@ -5,6 +5,7 @@ using System.Fabric;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.ServiceFabric.Services.Communication.Runtime;
+using Microsoft.ServiceFabric.Services.Remoting.Runtime;
 using Microsoft.ServiceFabric.Services.Runtime;
 
 namespace StatelessDemo
@@ -24,7 +25,7 @@ namespace StatelessDemo
         /// <returns>A collection of listeners.</returns>
         protected override IEnumerable<ServiceInstanceListener> CreateServiceInstanceListeners()
         {
-            return new ServiceInstanceListener[0];
+            return new[] { new ServiceInstanceListener(context => this.CreateServiceRemotingListener(Context)) };
         }
 
         /// <summary>
@@ -48,9 +49,9 @@ namespace StatelessDemo
             }
         }
 
-        public string HelloWorld()
+        public Task<string> HelloWorldAsync()
         {
-            return "Hello World";
+            return Task.FromResult("Hello World");
         }
     }
 }

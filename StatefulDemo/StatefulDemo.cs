@@ -5,6 +5,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.ServiceFabric.Data.Collections;
 using Microsoft.ServiceFabric.Services.Communication.Runtime;
+using Microsoft.ServiceFabric.Services.Remoting;
+using Microsoft.ServiceFabric.Services.Remoting.Runtime;
 using Microsoft.ServiceFabric.Services.Runtime;
 
 namespace StatefulDemo
@@ -12,7 +14,7 @@ namespace StatefulDemo
     /// <summary>
     /// An instance of this class is created for each service replica by the Service Fabric runtime.
     /// </summary>
-    internal sealed class StatefulDemo : StatefulService
+    internal sealed class StatefulDemo : StatefulService, IService
     {
         public StatefulDemo(StatefulServiceContext context)
             : base(context)
@@ -27,7 +29,7 @@ namespace StatefulDemo
         /// <returns>A collection of listeners.</returns>
         protected override IEnumerable<ServiceReplicaListener> CreateServiceReplicaListeners()
         {
-            return new ServiceReplicaListener[0];
+            return new[] { new ServiceReplicaListener(context => this.CreateServiceRemotingListener(Context)),  };
         }
 
         /// <summary>

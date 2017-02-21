@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Fabric;
+using System.Threading.Tasks;
 using System.Web.Http;
 using Interface;
-using Microsoft.ServiceFabric.Services.Client;
 using Microsoft.ServiceFabric.Services.Remoting.Client;
 
 namespace WebApi.Controllers
@@ -13,16 +13,16 @@ namespace WebApi.Controllers
     {
         [HttpGet]
         [Route("HelloWorld")]
-        public string HelloWorld()
+        public async Task<string> HelloWorldAsync()
         {
             var activationContext = FabricRuntime.GetActivationContext();
            
             try
             {
-                var uri = new Uri($"fabric:/{activationContext.ApplicationName}/StatelessDemo");
-                var service = ServiceProxy.Create<IStatelessDemo>(uri, new ServicePartitionKey(1));
+                var uri = new Uri($"{activationContext.ApplicationName}/StatelessDemo");
+                var service = ServiceProxy.Create<IStatelessDemo>(uri);
 
-                return service.HelloWorld();
+                return await service.HelloWorldAsync();
             }
             catch (Exception ex)
             {
