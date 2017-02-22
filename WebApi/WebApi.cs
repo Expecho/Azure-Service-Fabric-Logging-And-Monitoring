@@ -13,8 +13,10 @@ namespace WebApi
         public WebApi(StatelessServiceContext context)
             : base(context)
         {
-            
+            ServiceContext = context;
         }
+
+        public static ServiceContext ServiceContext { get; private set; }
 
         /// <summary>
         /// Optional override to create listeners (like tcp, http) for this service instance.

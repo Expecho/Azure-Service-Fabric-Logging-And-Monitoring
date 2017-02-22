@@ -152,20 +152,20 @@ namespace WebApi
         }
 
         [NonEvent]
-        public void ServiceCriticalError(ServiceContext serviceContext, Exception exception)
+        public void ServiceCriticalError(Exception exception)
         {
             if (IsEnabled())
             {
                 while (exception != null)
                 {
                     ServiceCriticalError(
-                        serviceContext.ServiceName.ToString(),
-                        serviceContext.ServiceTypeName,
-                        GetReplicaOrInstanceId(serviceContext),
-                        serviceContext.PartitionId,
-                        serviceContext.CodePackageActivationContext.ApplicationName,
-                        serviceContext.CodePackageActivationContext.ApplicationTypeName,
-                        serviceContext.NodeContext.NodeName,
+                        WebApi.ServiceContext.ServiceName.ToString(),
+                        WebApi.ServiceContext.ServiceTypeName,
+                        GetReplicaOrInstanceId(WebApi.ServiceContext),
+                        WebApi.ServiceContext.PartitionId,
+                        WebApi.ServiceContext.CodePackageActivationContext.ApplicationName,
+                        WebApi.ServiceContext.CodePackageActivationContext.ApplicationTypeName,
+                        WebApi.ServiceContext.NodeContext.NodeName,
                         exception.Message,
                         exception.GetType().FullName);
 

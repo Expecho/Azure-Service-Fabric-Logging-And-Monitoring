@@ -26,7 +26,7 @@ namespace WebApi.Controllers
             }
             catch (Exception ex)
             {
-              //  ServiceEventSource.Current.ServiceCriticalError(ServiceContext, ex);
+                ServiceEventSource.Current.ServiceCriticalError(ex);
             }
 
             return string.Empty;
@@ -36,7 +36,7 @@ namespace WebApi.Controllers
         [Route("CreateCriticalException")]
         public void CreateCriticalExceptionAsync()
         {
-            //erviceEventSource.Current.ServiceCriticalError(ex);
+            ServiceEventSource.Current.ServiceCriticalError(new InvalidOperationException("demo exception", new ArgumentNullException("demo innerexception")));
         }
     }
 }
