@@ -3,9 +3,9 @@
     {
       "type": "EventSource",
       "sources": [
-        { "providerName": "Microsoft-ServiceFabric-Services" },
-        { "providerName": "MyCompany-AzureServiceFabric.Demo.Diagnostics-WebApi" },
-        { "providerName": "Microsoft-ServiceFabric-Actors" }
+        {
+          "providerName": "MyCompany-AzureServiceFabric.Demo.Diagnostics-WebApi"
+        }
       ]
     }
   ],
@@ -17,13 +17,14 @@
   ],
   "outputs": [
     {
-      "type": "StatelessServiceHealthOutput"
+      "type": "StatelessServiceHealthOutput",
+      "filters": [
+        {
+          "type": "drop",
+          "include": "Level == Verbose || Level == Informational"
+        }
+      ]
     }
-    // Please update the instrumentationKey.
-    //{
-    //  "type": "ApplicationInsights",
-    //  "instrumentationKey": "00000000-0000-0000-0000-000000000000"
-    //}
   ],
   "schemaVersion": "2016-08-11",
   // "healthReporter": {

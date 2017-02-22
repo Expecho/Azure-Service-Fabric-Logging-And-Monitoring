@@ -29,9 +29,9 @@ namespace Common.Logging
         [NonEvent]
         public void Message(string message, params object[] args)
         {
-            if (this.IsEnabled())
+            if (IsEnabled())
             {
-                string finalMessage = string.Format(message, args);
+                var finalMessage = string.Format(message, args);
                 Message(finalMessage);
             }
         }
@@ -40,7 +40,7 @@ namespace Common.Logging
         [Event(MessageEventId, Level = EventLevel.Informational, Message = "{0}")]
         public void Message(string message)
         {
-            if (this.IsEnabled())
+            if (IsEnabled())
             {
                 WriteEvent(MessageEventId, message);
             }
@@ -49,10 +49,10 @@ namespace Common.Logging
         [NonEvent]
         public void ServiceMessage(ServiceContext serviceContext, string message, params object[] args)
         {
-            if (this.IsEnabled())
+            if (IsEnabled())
             {
 
-                string finalMessage = string.Format(message, args);
+                var finalMessage = string.Format(message, args);
                 ServiceMessage(
                     serviceContext.ServiceName.ToString(),
                     serviceContext.ServiceTypeName,
@@ -140,13 +140,13 @@ namespace Common.Logging
         #region Private methods
         private static long GetReplicaOrInstanceId(ServiceContext context)
         {
-            StatelessServiceContext stateless = context as StatelessServiceContext;
+            var stateless = context as StatelessServiceContext;
             if (stateless != null)
             {
                 return stateless.InstanceId;
             }
 
-            StatefulServiceContext stateful = context as StatefulServiceContext;
+            var stateful = context as StatefulServiceContext;
             if (stateful != null)
             {
                 return stateful.ReplicaId;

@@ -44,9 +44,9 @@ namespace WebApi
         [NonEvent]
         public void Message(string message, params object[] args)
         {
-            if (this.IsEnabled())
+            if (IsEnabled())
             {
-                string finalMessage = string.Format(message, args);
+                var finalMessage = string.Format(message, args);
                 Message(finalMessage);
             }
         }
@@ -55,7 +55,7 @@ namespace WebApi
         [Event(MessageEventId, Level = EventLevel.Informational, Message = "{0}")]
         public void Message(string message)
         {
-            if (this.IsEnabled())
+            if (IsEnabled())
             {
                 WriteEvent(MessageEventId, message);
             }
@@ -64,10 +64,10 @@ namespace WebApi
         [NonEvent]
         public void ServiceMessage(ServiceContext serviceContext, string message, params object[] args)
         {
-            if (this.IsEnabled())
+            if (IsEnabled())
             {
 
-                string finalMessage = string.Format(message, args);
+                var finalMessage = string.Format(message, args);
                 ServiceMessage(
                     serviceContext.ServiceName.ToString(),
                     serviceContext.ServiceTypeName,
@@ -150,18 +150,80 @@ namespace WebApi
         {
             WriteEvent(ServiceRequestStopEventId, requestTypeName, exception);
         }
+
+        [NonEvent]
+        public void ServiceCriticalError(ServiceContext serviceContext, Exception exception)
+        {
+            if (IsEnabled())
+            {
+                while (exception != null)
+                {
+                    ServiceCriticalError(
+                        serviceContext.ServiceName.ToString(),
+                        serviceContext.ServiceTypeName,
+                        GetReplicaOrInstanceId(serviceContext),
+                        serviceContext.PartitionId,
+                        serviceContext.CodePackageActivationContext.ApplicationName,
+                        serviceContext.CodePackageActivationContext.ApplicationTypeName,
+                        serviceContext.NodeContext.NodeName,
+                        exception.Message,
+                        exception.GetType().FullName);
+
+                    exception = exception.InnerException;
+                }
+            }
+        }
+
+        private const int ServiceCriticalErrorEventId = 7;
+        [Event(ServiceCriticalErrorEventId, Level = EventLevel.Critical, Message = "{7}")]
+        private
+#if UNSAFE
+        unsafe
+# endif
+        void ServiceCriticalError(
+            string serviceName,
+            string serviceTypeName,
+            long replicaOrInstanceId,
+            Guid partitionId,
+            string applicationName,
+            string applicationTypeName,
+            string nodeName,
+            string message,
+            string type)
+        {
+#if !UNSAFE
+            WriteEvent(ServiceCriticalErrorEventId, serviceName, serviceTypeName, replicaOrInstanceId, partitionId, applicationName, applicationTypeName, nodeName, message, type);
+#else
+            const int numArgs = 9;
+            fixed (char* pServiceName = serviceName, pServiceTypeName = serviceTypeName, pApplicationName = applicationName, pApplicationTypeName = applicationTypeName, pNodeName = nodeName, pMessage = message, pType = type)
+            {
+                EventData* eventData = stackalloc EventData[numArgs];
+                eventData[0] = new EventData { DataPointer = (IntPtr) pServiceName, Size = SizeInBytes(serviceName) };
+                eventData[1] = new EventData { DataPointer = (IntPtr) pServiceTypeName, Size = SizeInBytes(serviceTypeName) };
+                eventData[2] = new EventData { DataPointer = (IntPtr) (&replicaOrInstanceId), Size = sizeof(long) };
+                eventData[3] = new EventData { DataPointer = (IntPtr) (&partitionId), Size = sizeof(Guid) };
+                eventData[4] = new EventData { DataPointer = (IntPtr) pApplicationName, Size = SizeInBytes(applicationName) };
+                eventData[5] = new EventData { DataPointer = (IntPtr) pApplicationTypeName, Size = SizeInBytes(applicationTypeName) };
+                eventData[6] = new EventData { DataPointer = (IntPtr) pNodeName, Size = SizeInBytes(nodeName) };
+                eventData[7] = new EventData { DataPointer = (IntPtr) pMessage, Size = SizeInBytes(message) };
+                eventData[8] = new EventData { DataPointer = (IntPtr) pType, Size = SizeInBytes(type) };
+
+                WriteEventCore(ServiceMessageEventId, numArgs, eventData);
+            }
+#endif
+        }
         #endregion
 
         #region Private methods
         private static long GetReplicaOrInstanceId(ServiceContext context)
         {
-            StatelessServiceContext stateless = context as StatelessServiceContext;
+            var stateless = context as StatelessServiceContext;
             if (stateless != null)
             {
                 return stateless.InstanceId;
             }
 
-            StatefulServiceContext stateful = context as StatefulServiceContext;
+            var stateful = context as StatefulServiceContext;
             if (stateful != null)
             {
                 return stateful.ReplicaId;
@@ -182,6 +244,6 @@ namespace WebApi
             }
         }
 #endif
-        #endregion
+#endregion
     }
 }

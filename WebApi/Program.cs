@@ -22,7 +22,7 @@ namespace WebApi
                 // Registering a service maps a service type name to a .NET type.
                 // When Service Fabric creates an instance of this service type,
                 // an instance of the class is created in this host process.
-                using (var diagnosticsPipeline = ServiceFabricDiagnosticPipelineFactory.CreatePipeline(
+                using (ServiceFabricDiagnosticPipelineFactory.CreatePipeline(
                             "WebApi-DiagnosticsPipeline"))
                 {
                     ServiceRuntime.RegisterServiceAsync("WebApiType",

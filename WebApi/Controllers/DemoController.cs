@@ -26,10 +26,17 @@ namespace WebApi.Controllers
             }
             catch (Exception ex)
             {
-                ServiceEventSource.Current.Message(ex.Message);
+              //  ServiceEventSource.Current.ServiceCriticalError(ServiceContext, ex);
             }
 
             return string.Empty;
+        }
+
+        [HttpGet]
+        [Route("CreateCriticalException")]
+        public void CreateCriticalExceptionAsync()
+        {
+            //erviceEventSource.Current.ServiceCriticalError(ex);
         }
     }
 }

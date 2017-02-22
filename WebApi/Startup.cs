@@ -10,7 +10,7 @@ namespace WebApi
         public static void ConfigureApp(IAppBuilder appBuilder)
         {
             // Configure Web API for self-host. 
-            HttpConfiguration config = new HttpConfiguration();
+            var config = new HttpConfiguration();
 
             //config.Routes.MapHttpRoute(
             //    name: "DefaultApi",
