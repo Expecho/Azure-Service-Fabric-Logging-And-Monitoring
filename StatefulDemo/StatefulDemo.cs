@@ -11,10 +11,15 @@ using Microsoft.ServiceFabric.Services.Runtime;
 
 namespace StatefulDemo
 {
+    public interface IStatefulDemo : IService
+    {
+        
+    }
+
     /// <summary>
     /// An instance of this class is created for each service replica by the Service Fabric runtime.
     /// </summary>
-    internal sealed class StatefulDemo : StatefulService, IService
+    internal sealed class StatefulDemo : StatefulService, IStatefulDemo
     {
         public StatefulDemo(StatefulServiceContext context)
             : base(context)
@@ -62,7 +67,7 @@ namespace StatefulDemo
                     await tx.CommitAsync();
                 }
 
-                await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
+                await Task.Delay(TimeSpan.FromHours(1), cancellationToken);
             }
         }
     }

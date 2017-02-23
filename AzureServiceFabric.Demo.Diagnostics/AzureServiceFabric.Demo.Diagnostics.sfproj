@@ -30,6 +30,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ActorDemo\ActorDemo.csproj" />
+    <ProjectReference Include="..\EventSourceEventCollector\EventSourceEventCollector.csproj" />
     <ProjectReference Include="..\StatefulDemo\StatefulDemo.csproj" />
     <ProjectReference Include="..\StatelessDemo\StatelessDemo.csproj" />
     <ProjectReference Include="..\WebApi\WebApi.csproj" />

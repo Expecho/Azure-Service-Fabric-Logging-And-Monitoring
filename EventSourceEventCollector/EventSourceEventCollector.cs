@@ -1,21 +1,20 @@
-﻿using Interface;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Fabric;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.ServiceFabric.Services.Communication.Runtime;
-using Microsoft.ServiceFabric.Services.Remoting.Runtime;
 using Microsoft.ServiceFabric.Services.Runtime;
 
-namespace StatelessDemo
+namespace EventSourceEventCollector
 {
     /// <summary>
     /// An instance of this class is created for each service instance by the Service Fabric runtime.
     /// </summary>
-    internal sealed class StatelessDemo : StatelessService, IStatelessDemo
+    internal sealed class EventSourceEventCollector : StatelessService
     {
-        public StatelessDemo(StatelessServiceContext context)
+        public EventSourceEventCollector(StatelessServiceContext context)
             : base(context)
         { }
 
@@ -25,7 +24,7 @@ namespace StatelessDemo
         /// <returns>A collection of listeners.</returns>
         protected override IEnumerable<ServiceInstanceListener> CreateServiceInstanceListeners()
         {
-            return new[] { new ServiceInstanceListener(context => this.CreateServiceRemotingListener(Context)) };
+            return new ServiceInstanceListener[0];
         }
 
         /// <summary>
@@ -43,15 +42,10 @@ namespace StatelessDemo
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                ServiceEventSource.Current.ServiceMessage(Context, "Working-{0}", ++iterations);
+                ServiceEventSource.Current.ServiceMessage(this.Context, "Working-{0}", ++iterations);
 
                 await Task.Delay(TimeSpan.FromHours(1), cancellationToken);
             }
-        }
-
-        public Task<string> HelloWorldAsync()
-        {
-            return Task.FromResult("Hello World");
         }
     }
 }

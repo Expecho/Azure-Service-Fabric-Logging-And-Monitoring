@@ -20,6 +20,6 @@
                                     AzureActiveDirectory="true"
                                     ServerCertThumbprint="0123456789012345678901234567890123456789" />
   -->
-  <ClusterConnectionParameters />
+  <ClusterConnectionParameters ConnectionEndpoint="plancare-poc.westeurope.cloudapp.azure.com:19000" AzureActiveDirectory="true" ServerCertThumbprint="FD2331546D9BFCB2F58522A69F77E619F71DFAF8" />
   <ApplicationParameterFile Path="..\ApplicationParameters\Cloud.xml" />
 </PublishProfile>
