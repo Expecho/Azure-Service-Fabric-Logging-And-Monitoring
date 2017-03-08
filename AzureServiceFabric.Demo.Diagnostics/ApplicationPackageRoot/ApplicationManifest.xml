@@ -3,13 +3,7 @@
   <Parameters>
     <Parameter Name="EventSourceEventCollector_InstanceCount" DefaultValue="-1" />
     <Parameter Name="WebApi_InstanceCount" DefaultValue="-1" />
-    <Parameter Name="StatefulDemo_MinReplicaSetSize" DefaultValue="3" />
-    <Parameter Name="StatefulDemo_PartitionCount" DefaultValue="1" />
-    <Parameter Name="StatefulDemo_TargetReplicaSetSize" DefaultValue="3" />
     <Parameter Name="StatelessDemo_InstanceCount" DefaultValue="-1" />
-    <Parameter Name="ActorDemoActorService_PartitionCount" DefaultValue="10" />
-    <Parameter Name="ActorDemoActorService_MinReplicaSetSize" DefaultValue="3" />
-    <Parameter Name="ActorDemoActorService_TargetReplicaSetSize" DefaultValue="3" />
   </Parameters>
   <!-- Import the ServiceManifest from the ServicePackage. The ServiceManifestName and ServiceManifestVersion 
        should match the Name and Version attributes of the ServiceManifest element defined in the 
@@ -20,13 +14,6 @@
   </ServiceManifestImport>
   <ServiceManifestImport>
     <ServiceManifestRef ServiceManifestName="WebApiPkg" ServiceManifestVersion="1.0.0" />
-    <ConfigOverrides />
-  </ServiceManifestImport>
-  <ServiceManifestImport>
-    <ServiceManifestRef ServiceManifestName="ActorDemoPkg" ServiceManifestVersion="1.0.0" />
-  </ServiceManifestImport>
-  <ServiceManifestImport>
-    <ServiceManifestRef ServiceManifestName="StatefulDemoPkg" ServiceManifestVersion="1.0.0" />
     <ConfigOverrides />
   </ServiceManifestImport>
   <ServiceManifestImport>
@@ -49,20 +36,10 @@
         <SingletonPartition />
       </StatelessService>
     </Service>
-    <Service Name="StatefulDemo">
-      <StatefulService ServiceTypeName="StatefulDemoType" TargetReplicaSetSize="[StatefulDemo_TargetReplicaSetSize]" MinReplicaSetSize="[StatefulDemo_MinReplicaSetSize]">
-        <UniformInt64Partition PartitionCount="[StatefulDemo_PartitionCount]" LowKey="-9223372036854775808" HighKey="9223372036854775807" />
-      </StatefulService>
-    </Service>
     <Service Name="StatelessDemo">
       <StatelessService ServiceTypeName="StatelessDemoType" InstanceCount="[StatelessDemo_InstanceCount]">
         <SingletonPartition />
       </StatelessService>
-    </Service>
-    <Service Name="ActorDemoActorService" GeneratedIdRef="bf8fa233-5a0b-4fc7-851a-cb532c6f3b3e|Persisted">
-      <StatefulService ServiceTypeName="ActorDemoActorServiceType" TargetReplicaSetSize="[ActorDemoActorService_TargetReplicaSetSize]" MinReplicaSetSize="[ActorDemoActorService_MinReplicaSetSize]">
-        <UniformInt64Partition PartitionCount="[ActorDemoActorService_PartitionCount]" LowKey="-9223372036854775808" HighKey="9223372036854775807" />
-      </StatefulService>
     </Service>
   </DefaultServices>
 </ApplicationManifest>

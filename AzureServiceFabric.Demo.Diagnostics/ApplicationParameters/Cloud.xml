@@ -3,9 +3,6 @@
   <Parameters>
     <Parameter Name="EventSourceEventCollector_InstanceCount" Value="-1" />
     <Parameter Name="WebApi_InstanceCount" Value="-1" />
-    <Parameter Name="StatefulDemo_PartitionCount" Value="1" />
-    <Parameter Name="StatefulDemo_MinReplicaSetSize" Value="3" />
-    <Parameter Name="StatefulDemo_TargetReplicaSetSize" Value="3" />
     <Parameter Name="StatelessDemo_InstanceCount" Value="-1" />
   </Parameters>
 </Application>
