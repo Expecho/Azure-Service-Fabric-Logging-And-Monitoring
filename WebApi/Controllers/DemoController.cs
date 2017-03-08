@@ -34,9 +34,16 @@ namespace WebApi.Controllers
 
         [HttpGet]
         [Route("CreateCriticalException")]
-        public void CreateCriticalExceptionAsync()
+        public void CreateCriticalException()
         {
             ServiceEventSource.Current.ServiceCriticalError(new InvalidOperationException("demo exception", new ArgumentNullException("demo innerexception")));
+        }
+
+        [HttpGet]
+        [Route("CreateUnhandledException")]
+        public void CreateUnhandledException()
+        {
+            throw new Exception("Breaking things");
         }
     }
 }

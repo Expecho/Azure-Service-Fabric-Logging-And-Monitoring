@@ -49,6 +49,9 @@
       <HintPath>..\packages\Microsoft.Diagnostics.EventFlow.Inputs.EventSource.1.0.2\lib\net46\Microsoft.Diagnostics.EventFlow.Inputs.EventSource.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.Diagnostics.EventFlow.Outputs.StdOutput, Version=1.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Diagnostics.EventFlow.Outputs.StdOutput.1.0.0\lib\net451\Microsoft.Diagnostics.EventFlow.Outputs.StdOutput.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Diagnostics.EventFlow.ServiceFabric, Version=1.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=AMD64">
       <HintPath>..\packages\Microsoft.Diagnostics.EventFlow.ServiceFabric.1.0.0\lib\net451\Microsoft.Diagnostics.EventFlow.ServiceFabric.dll</HintPath>
       <Private>True</Private>

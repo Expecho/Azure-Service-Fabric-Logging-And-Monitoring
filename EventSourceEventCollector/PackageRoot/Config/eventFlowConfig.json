@@ -1,11 +1,11 @@
 {
   "inputs": [
     {
-      "type": "EventSource",
-      "sources": [
-        { "providerName": "Microsoft-ServiceFabric-Services" },
-        { "providerName": "Microsoft-ServiceFabric-Actors" },
-        { "providerName": "MyCompany-AzureServiceFabric.Demo.Diagnostics-StatelessDemo" }
+      "type": "ETW",
+      "providers": [
+        {
+          "providerName": "MyCompany-AzureServiceFabric.Demo.Diagnostics-WebApi"
+        }
       ]
     }
   ],
@@ -17,9 +17,7 @@
   ],
   "outputs": [
     {
-      "type": "OmsOutput",
-      "workspaceId": "<workspace-GUID>",
-      "workspaceKey": "<base-64-encoded workspace key>"
+      "type": "DebugOutput"
     }
   ],
   "schemaVersion": "2016-08-11",
@@ -37,5 +35,11 @@
   //    "maxConcurrency": "8",
   //    "pipelineCompletionTimeoutMsec": "30000"
   // },
-  "extensions": []
+  "extensions": [
+    {
+      "category": "OutputFactory",
+      "type": "DebugOutput",
+      "qualifiedTypeName": "EventFlow.Outputs.Custom.Debug.DebugOutputFactory, EventFlow.Outputs.Custom.Debug"
+    }
+  ]
 }
