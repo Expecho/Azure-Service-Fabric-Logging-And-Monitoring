@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventSourceEventCollector",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventFlow.Outputs.Custom.Debug", "EventFlow.Outputs.Custom.Debug\EventFlow.Outputs.Custom.Debug.csproj", "{4DBBD0D4-9E7A-494C-8B04-5D5CD4B97C1D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FrontEnd", "FrontEnd\FrontEnd.csproj", "{F8105773-DDD5-4FEF-9988-724BE3526993}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +89,14 @@ Global
 		{4DBBD0D4-9E7A-494C-8B04-5D5CD4B97C1D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4DBBD0D4-9E7A-494C-8B04-5D5CD4B97C1D}.Release|x64.ActiveCfg = Release|Any CPU
 		{4DBBD0D4-9E7A-494C-8B04-5D5CD4B97C1D}.Release|x64.Build.0 = Release|Any CPU
+		{F8105773-DDD5-4FEF-9988-724BE3526993}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8105773-DDD5-4FEF-9988-724BE3526993}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8105773-DDD5-4FEF-9988-724BE3526993}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{F8105773-DDD5-4FEF-9988-724BE3526993}.Debug|x64.Build.0 = Debug|Any CPU
+		{F8105773-DDD5-4FEF-9988-724BE3526993}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8105773-DDD5-4FEF-9988-724BE3526993}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F8105773-DDD5-4FEF-9988-724BE3526993}.Release|x64.ActiveCfg = Release|Any CPU
+		{F8105773-DDD5-4FEF-9988-724BE3526993}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
