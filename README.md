@@ -14,3 +14,7 @@ There are multiple ways to collect the events emitted by the EventSource classes
 
 Another way is to create a seperate service that collects the events of the different EventSource classes using [the ETW input provider](https://github.com/Azure/diagnostics-eventflow#etw-event-tracing-for-windows). This way you can centralize the setup of the EventFlow pipeline.  See [the EventSourceEventCollector project](EventSourceEventCollector).
 
+# Useful links
+
+- [Service Fabric Diagnostiscs Overview](https://docs.microsoft.com/en-us/azure/service-fabric/service-fabric-diagnostics-overview)
+- [Service Fabric Health Monitoring](https://docs.microsoft.com/en-us/azure/service-fabric/service-fabric-health-introduction)
