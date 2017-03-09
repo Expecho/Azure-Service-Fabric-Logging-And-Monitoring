@@ -1,8 +1,15 @@
+This repository contains an Azure Service Fabric application that provides some guidance and examples on how to setup and configure logging and demonstrates some approaches.          
+
 # Azure Service Fabric Logging
 
-This repository contains an Azure Service Fabric application that provides some guidance and examples on how to setup logging.           
+Service Fabric by default uses Event Tracing for Windows (EWT) to emit events. Using [the EventFlow library suite] (https://github.com/Azure/diagnostics-eventflow) these events can be send to different sinks like OMS, Application Insights or others using a configurable pipeline.
 
-Service Fabric uses Event Tracing for Windows (EWT) to emit events. Using [the EventFlow library suite] (https://github.com/Azure/diagnostics-eventflow) these events can be send to different sinks like OMS, Application Insights or others using a configurable pipeline.
+## Structured Logging
+
+Using ETW gives the advantages of being able to use structured logging. There are other structured logging enabled frameworks like [Serilog](https://serilog.net/). This repository is focused on using structured logging in order to provide rich en detailed logging output. If you are not familiar with structured logging these links provide some insights about the what and why:
+
+- [The concept of structured logging](https://nblumhardt.com/2016/06/structured-logging-concepts-in-net-series-1/)
+- [Benefits of structured logging](http://softwareengineering.stackexchange.com/questions/312197/benefits-of-structured-logging-vs-basic-logging)
 
 ## Custom health reporting using the EventFlow library suite
 
