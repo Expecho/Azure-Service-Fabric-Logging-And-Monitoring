@@ -16,5 +16,5 @@ Another way is to create a seperate service that collects the events of the diff
 
 # Useful links
 
-- [Service Fabric Diagnostiscs Overview](https://docs.microsoft.com/en-us/azure/service-fabric/service-fabric-diagnostics-overview)
+- [Service Fabric Diagnostics Overview](https://docs.microsoft.com/en-us/azure/service-fabric/service-fabric-diagnostics-overview)
 - [Service Fabric Health Monitoring](https://docs.microsoft.com/en-us/azure/service-fabric/service-fabric-health-introduction)
