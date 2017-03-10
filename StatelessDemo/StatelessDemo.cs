@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using Microsoft.ServiceFabric.Services.Communication.Runtime;
 using Microsoft.ServiceFabric.Services.Remoting.Runtime;
 using Microsoft.ServiceFabric.Services.Runtime;
+using Microsoft.Extensions.Logging;
+using Interface.Logging;
 
 namespace StatelessDemo
 {
@@ -15,9 +17,14 @@ namespace StatelessDemo
     /// </summary>
     internal sealed class StatelessDemo : StatelessService, IStatelessDemo
     {
-        public StatelessDemo(StatelessServiceContext context)
+        private readonly ILogger logger;
+        private int requestCount;
+
+        public StatelessDemo(StatelessServiceContext context, ILogger logger)
             : base(context)
-        { }
+        {
+            this.logger = logger;
+        }
 
         /// <summary>
         /// Optional override to create listeners (e.g., TCP, HTTP) for this service replica to handle client or user requests.
@@ -51,7 +58,12 @@ namespace StatelessDemo
 
         public Task<string> HelloWorldAsync()
         {
-            return Task.FromResult("Hello World");
+            using (logger.BeginScope(nameof(HelloWorldAsync)))
+            {
+                logger.LogInformation(LoggingEvents.REQUEST, "Times requested: {requestCount}", ++requestCount);
+
+                return Task.FromResult("Hello World");
+            }
         }
     }
 }

@@ -21,9 +21,9 @@ namespace EventSourceEventCollector
                 // Registering a service maps a service type name to a .NET type.
                 // When Service Fabric creates an instance of this service type,
                 // an instance of the class is created in this host process.
-                using (var pipeline = ServiceFabricDiagnosticPipelineFactory.CreatePipeline(
-                    "EventSourceEventCollector-DiagnosticsPipeline"))
-                {
+                //using (var pipeline = ServiceFabricDiagnosticPipelineFactory.CreatePipeline(
+                //    "EventSourceEventCollector-DiagnosticsPipeline"))
+                //{
                     ServiceRuntime.RegisterServiceAsync("EventSourceEventCollectorType",
                         context => new EventSourceEventCollector(context)).GetAwaiter().GetResult();
 
@@ -32,7 +32,7 @@ namespace EventSourceEventCollector
 
                     // Prevents this host process from terminating so services keep running.
                     Thread.Sleep(Timeout.Infinite);
-                }
+                //}
             }
             catch (Exception e)
             {
