@@ -62,6 +62,12 @@ namespace StatelessDemo
             {
                 logger.LogInformation(LoggingEvents.REQUEST, "Times requested: {requestCount}", ++requestCount);
 
+                var metrics = new List<LoadMetric>
+                {
+                    new LoadMetric(nameof(requestCount), requestCount)
+                };
+
+                Partition.ReportLoad(metrics);
                 return Task.FromResult("Hello World");
             }
         }

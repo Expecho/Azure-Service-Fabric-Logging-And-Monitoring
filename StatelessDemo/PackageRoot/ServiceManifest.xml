@@ -7,7 +7,11 @@
   <ServiceTypes>
     <!-- This is the name of your ServiceType. 
          This name must match the string used in RegisterServiceType call in Program.cs. -->
-    <StatelessServiceType ServiceTypeName="StatelessDemoType" />
+    <StatelessServiceType ServiceTypeName="StatelessDemoType">
+      <LoadMetrics>
+        <LoadMetric Name="requestCount" Weight="Zero" />
+      </LoadMetrics>
+    </StatelessServiceType>
   </ServiceTypes>
 
   <!-- Code package is your service executable. -->
