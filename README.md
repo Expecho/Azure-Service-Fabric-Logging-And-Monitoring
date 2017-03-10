@@ -1,8 +1,15 @@
+This repository contains an Azure Service Fabric application that provides some guidance and examples on how to setup and configure logging and demonstrates some approaches.          
+
 # Azure Service Fabric Logging
 
-This repository contains an Azure Service Fabric application that provides some guidance and examples on how to setup logging.           
+Service Fabric by default uses Event Tracing for Windows (EWT) to emit events. Using [the EventFlow library suite] (https://github.com/Azure/diagnostics-eventflow) these events can be send to different sinks like OMS, Application Insights or others using a configurable pipeline.
 
-Service Fabric uses Event Tracing for Windows (EWT) to emit events. Using [the EventFlow library suite] (https://github.com/Azure/diagnostics-eventflow) these events can be send to different sinks like OMS, Application Insights or others using a configurable pipeline.
+## Structured Logging
+
+Using ETW gives the advantages of being able to use structured logging. There are other structured logging enabled frameworks like [Serilog](https://serilog.net/). This repository is focused on using structured logging in order to provide rich en detailed logging output. If you are not familiar with structured logging these links provide some insights about the what and why:
+
+- [The concept of structured logging](https://nblumhardt.com/2016/06/structured-logging-concepts-in-net-series-1/)
+- [Benefits of structured logging](http://softwareengineering.stackexchange.com/questions/312197/benefits-of-structured-logging-vs-basic-logging)
 
 ## Custom health reporting using the EventFlow library suite
 
@@ -14,3 +21,7 @@ There are multiple ways to collect the events emitted by the EventSource classes
 
 Another way is to create a seperate service that collects the events of the different EventSource classes using [the ETW input provider](https://github.com/Azure/diagnostics-eventflow#etw-event-tracing-for-windows). This way you can centralize the setup of the EventFlow pipeline.  See [the EventSourceEventCollector project](EventSourceEventCollector).
 
+# Useful links
+
+- [Service Fabric Diagnostics Overview](https://docs.microsoft.com/en-us/azure/service-fabric/service-fabric-diagnostics-overview)
+- [Service Fabric Health Monitoring](https://docs.microsoft.com/en-us/azure/service-fabric/service-fabric-health-introduction)
