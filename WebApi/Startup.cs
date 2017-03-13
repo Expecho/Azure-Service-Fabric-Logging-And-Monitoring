@@ -1,29 +1,34 @@
-﻿using System.Web.Http;
-using Owin;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace WebApi
 {
-    public static class Startup
+    public class Startup
     {
-        // This code configures Web API. The Startup class is specified as a type
-        // parameter in the WebApp.Start method.
-        public static void ConfigureApp(IAppBuilder appBuilder)
+        public Startup(IHostingEnvironment env)
         {
-            // Configure Web API for self-host. 
-            var config = new HttpConfiguration();
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
+                .AddEnvironmentVariables();
+            Configuration = builder.Build();
+        }
 
-            //config.Routes.MapHttpRoute(
-            //    name: "DefaultApi",
-            //    routeTemplate: "api/{controller}/{id}",
-            //    defaults: new { id = RouteParameter.Optional }
-            //);
+        public IConfigurationRoot Configuration { get; }
 
-            config.MapHttpAttributeRoutes();
+        // This method gets called by the runtime. Use this method to add services to the container.
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddMvc();
+        }
 
-            appBuilder.UseWebApi(config);
-            appBuilder.UseCors(Microsoft.Owin.Cors.CorsOptions.AllowAll);
-
-            config.EnsureInitialized();
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        // TODO: Logging toevoegen.
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        {
+            app.UseMvc();
         }
     }
 }

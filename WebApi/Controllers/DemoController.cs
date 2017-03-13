@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Fabric;
 using System.Threading.Tasks;
-using System.Web.Http;
+using Microsoft.AspNetCore.Mvc;
 using Interface;
 using Microsoft.ServiceFabric.Services.Remoting.Client;
 
 namespace WebApi.Controllers
 {
-    [ServiceRequestActionFilter]
-    [RoutePrefix("api/demo")]
-    public class DemoController : ApiController
+    [Route("api/[controller]")]
+    public class DemoController : Controller
     {
         [HttpGet]
         [Route("HelloWorld")]
@@ -32,15 +31,13 @@ namespace WebApi.Controllers
             return string.Empty;
         }
 
-        [HttpGet]
-        [Route("CreateCriticalException")]
+        [HttpGet("CreateCriticalException")]
         public void CreateCriticalException()
         {
             ServiceEventSource.Current.ServiceCriticalError(new InvalidOperationException("demo exception", new ArgumentNullException("demo innerexception")));
         }
 
-        [HttpGet]
-        [Route("CreateUnhandledException")]
+        [HttpGet("CreateUnhandledException")]
         public void CreateUnhandledException()
         {
             throw new Exception("Breaking things");

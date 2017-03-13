@@ -24,6 +24,7 @@ namespace StatelessDemo
             : base(context)
         {
             this.logger = logger;
+            logger.LogInformation(LoggingEvents.SYSTEM_EVENT, nameof(StatelessDemo));
         }
 
         /// <summary>
@@ -32,28 +33,8 @@ namespace StatelessDemo
         /// <returns>A collection of listeners.</returns>
         protected override IEnumerable<ServiceInstanceListener> CreateServiceInstanceListeners()
         {
+            logger.LogInformation(LoggingEvents.SYSTEM_EVENT, nameof(CreateServiceInstanceListeners));
             return new[] { new ServiceInstanceListener(context => this.CreateServiceRemotingListener(Context)) };
-        }
-
-        /// <summary>
-        /// This is the main entry point for your service instance.
-        /// </summary>
-        /// <param name="cancellationToken">Canceled when Service Fabric needs to shut down this service instance.</param>
-        protected override async Task RunAsync(CancellationToken cancellationToken)
-        {
-            // TODO: Replace the following sample code with your own logic 
-            //       or remove this RunAsync override if it's not needed in your service.
-
-            long iterations = 0;
-
-            while (true)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-
-                ServiceEventSource.Current.ServiceMessage(Context, "Working-{0}", ++iterations);
-
-                await Task.Delay(TimeSpan.FromHours(1), cancellationToken);
-            }
         }
 
         public Task<string> HelloWorldAsync()
@@ -70,6 +51,24 @@ namespace StatelessDemo
                 Partition.ReportLoad(metrics);
                 return Task.FromResult("Hello World");
             }
+        }
+
+        protected override Task OnOpenAsync(CancellationToken cancellationToken)
+        {
+            logger.LogInformation(LoggingEvents.SYSTEM_EVENT, nameof(OnOpenAsync));
+            return base.OnOpenAsync(cancellationToken);
+        }
+
+        protected override Task OnCloseAsync(CancellationToken cancellationToken)
+        {
+            logger.LogInformation(LoggingEvents.SYSTEM_EVENT, nameof(OnCloseAsync));
+            return base.OnCloseAsync(cancellationToken);
+        }
+
+        protected override void OnAbort()
+        {
+            logger.LogInformation(LoggingEvents.SYSTEM_EVENT, nameof(OnAbort));
+            base.OnAbort();
         }
     }
 }

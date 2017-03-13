@@ -4,6 +4,7 @@ using System.Threading;
 using Serilog;
 using Microsoft.Extensions.Logging;
 using Microsoft.ServiceFabric.Services.Runtime;
+using Serilog.Context;
 
 namespace StatelessDemo
 {
@@ -23,6 +24,7 @@ namespace StatelessDemo
                 var loggerFactory = new LoggerFactory();
 
                 var logger = new LoggerConfiguration()
+                    .Enrich.FromLogContext()
                     .WriteTo.Trace()
                     .WriteTo.Observers((events) => events.Subscribe(e =>
                     {
@@ -33,7 +35,18 @@ namespace StatelessDemo
                 loggerFactory.AddSerilog(logger, true);
 
                 ServiceRuntime.RegisterServiceAsync("StatelessDemoType",
-                    context => new StatelessDemo(context, loggerFactory.CreateLogger<StatelessDemo>())).GetAwaiter().GetResult();
+                    context => 
+                    {
+                        LogContext.PushProperty(nameof(context.ServiceTypeName), context.ServiceTypeName);
+                        LogContext.PushProperty(nameof(context.ServiceName), context.ServiceName);
+                        LogContext.PushProperty(nameof(context.PartitionId), context.PartitionId);
+                        LogContext.PushProperty(nameof(context.ReplicaOrInstanceId), context.ReplicaOrInstanceId);
+                        LogContext.PushProperty(nameof(context.NodeContext.NodeName), context.NodeContext.NodeName);
+                        LogContext.PushProperty(nameof(context.CodePackageActivationContext.ApplicationName), context.CodePackageActivationContext.ApplicationName);
+                        LogContext.PushProperty(nameof(context.CodePackageActivationContext.ApplicationTypeName), context.CodePackageActivationContext.ApplicationTypeName);
+                        
+                        return new StatelessDemo(context, loggerFactory.CreateLogger<StatelessDemo>());
+                    }).GetAwaiter().GetResult();
 
                 ServiceEventSource.Current.ServiceTypeRegistered(Process.GetCurrentProcess().Id, typeof(StatelessDemo).Name);
 
