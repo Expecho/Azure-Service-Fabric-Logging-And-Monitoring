@@ -34,7 +34,7 @@ namespace StatelessDemo
         protected override IEnumerable<ServiceInstanceListener> CreateServiceInstanceListeners()
         {
             logger.LogInformation(LoggingEvents.SYSTEM_EVENT, nameof(CreateServiceInstanceListeners));
-            return new[] { new ServiceInstanceListener(context => this.CreateServiceRemotingListener(Context)) };
+            return new[] { new ServiceInstanceListener(context => this.CreateServiceRemotingListener(context)) };
         }
 
         public Task<string> HelloWorldAsync()
