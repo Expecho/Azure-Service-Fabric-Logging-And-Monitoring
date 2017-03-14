@@ -5,6 +5,7 @@ using Serilog;
 using Microsoft.Extensions.Logging;
 using Microsoft.ServiceFabric.Services.Runtime;
 using Serilog.Context;
+using Serilog.Formatting.Json;
 
 namespace StatelessDemo
 {
@@ -25,11 +26,7 @@ namespace StatelessDemo
 
                 var logger = new LoggerConfiguration()
                     .Enrich.FromLogContext()
-                    .WriteTo.Trace()
-                    .WriteTo.Observers((events) => events.Subscribe(e =>
-                    {
-                        Debugger.Break();   
-                    }))
+                    .WriteTo.Trace(new JsonFormatter())
                     .CreateLogger();
 
                 loggerFactory.AddSerilog(logger, true);

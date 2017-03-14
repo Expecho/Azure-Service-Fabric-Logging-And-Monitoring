@@ -6,6 +6,8 @@ using Microsoft.ServiceFabric.Services.Runtime;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using System.IO;
+using Microsoft.Extensions.Logging;
+using Interface.Logging;
 
 namespace WebApi
 {
@@ -14,10 +16,13 @@ namespace WebApi
     /// </summary>
     internal sealed class WebApi : StatelessService
     {
-        public WebApi(StatelessServiceContext context)
+        private readonly ILogger logger;
+
+        public WebApi(StatelessServiceContext context, ILogger logger)
             : base(context)
         {
             ServiceContext = context;
+            this.logger = logger;
         }
 
         public static ServiceContext ServiceContext { get; private set; }
@@ -34,11 +39,13 @@ namespace WebApi
                     new WebListenerCommunicationListener(serviceContext, "ServiceEndpoint", url =>
                     {
                         ServiceEventSource.Current.ServiceMessage(serviceContext, $"Starting WebListener on {url}");
+                        logger.LogInformation(LoggingEvents.SYSTEM_EVENT, "Starting WebListener on {url}", url);
 
                         return new WebHostBuilder().UseWebListener()
                                     .ConfigureServices(
                                         services => services
-                                            .AddSingleton(serviceContext))
+                                            .AddSingleton(serviceContext)
+                                            .AddSingleton(logger))
                                     .UseContentRoot(Directory.GetCurrentDirectory())
                                     .UseStartup<Startup>()
                                     .UseUrls(url)

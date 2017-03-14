@@ -17,10 +17,10 @@ namespace StatelessDemo
     /// </summary>
     internal sealed class StatelessDemo : StatelessService, IStatelessDemo
     {
-        private readonly ILogger logger;
+        private readonly ILogger<StatelessDemo> logger;
         private int requestCount;
 
-        public StatelessDemo(StatelessServiceContext context, ILogger logger)
+        public StatelessDemo(StatelessServiceContext context, ILogger<StatelessDemo> logger)
             : base(context)
         {
             this.logger = logger;

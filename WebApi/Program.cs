@@ -6,6 +6,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Diagnostics.EventFlow.ServiceFabric;
 using Microsoft.ServiceFabric.Services.Runtime;
+using Serilog.Context;
+using Serilog;
+using Microsoft.Extensions.Logging;
+using Interface.Logging;
+using Serilog.Formatting.Json;
 
 namespace WebApi
 {
@@ -25,11 +30,35 @@ namespace WebApi
                 using (var pipeline = ServiceFabricDiagnosticPipelineFactory.CreatePipeline(
                             "WebApi-DiagnosticsPipeline"))
                 {
+                    var loggerFactory = new LoggerFactory();
+
+                    var loggerImp = new LoggerConfiguration()
+                        .Enrich.FromLogContext()
+                        .WriteTo.Trace(new JsonFormatter())
+                        .CreateLogger();
+
+                    loggerFactory.AddSerilog(loggerImp, true);
+                    
+                    var logger = loggerFactory.CreateLogger<WebApi>();
+
                     ServiceRuntime.RegisterServiceAsync("WebApiType",
-                        context => new WebApi(context)).GetAwaiter().GetResult();
+                    context =>
+                    {
+                        LogContext.PushProperty(nameof(context.ServiceTypeName), context.ServiceTypeName);
+                        LogContext.PushProperty(nameof(context.ServiceName), context.ServiceName);
+                        LogContext.PushProperty(nameof(context.PartitionId), context.PartitionId);
+                        LogContext.PushProperty(nameof(context.ReplicaOrInstanceId), context.ReplicaOrInstanceId);
+                        LogContext.PushProperty(nameof(context.NodeContext.NodeName), context.NodeContext.NodeName);
+                        LogContext.PushProperty(nameof(context.CodePackageActivationContext.ApplicationName), context.CodePackageActivationContext.ApplicationName);
+                        LogContext.PushProperty(nameof(context.CodePackageActivationContext.ApplicationTypeName), context.CodePackageActivationContext.ApplicationTypeName);
+
+                        return new WebApi(context, logger);
+                    }).GetAwaiter().GetResult();
 
                     ServiceEventSource.Current.ServiceTypeRegistered(Process.GetCurrentProcess().Id,
                         typeof (WebApi).Name);
+
+                    logger.LogTrace(LoggingEvents.SYSTEM_EVENT, "ServiceType {ServiceName} is registred in process with id {ProcessId}", typeof(WebApi).Name, Process.GetCurrentProcess().Id);
 
                     // Prevents this host process from terminating so services keeps running. 
                     Thread.Sleep(Timeout.Infinite);

@@ -4,12 +4,21 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Interface;
 using Microsoft.ServiceFabric.Services.Remoting.Client;
+using Microsoft.Extensions.Logging;
+using Interface.Logging;
 
 namespace WebApi.Controllers
 {
     [Route("api/[controller]")]
     public class DemoController : Controller
     {
+        private readonly ILogger logger;
+
+        public DemoController(ILogger logger)
+        {
+            this.logger = logger;
+        }
+
         [HttpGet]
         [Route("HelloWorld")]
         public async Task<string> HelloWorldAsync()
@@ -21,10 +30,13 @@ namespace WebApi.Controllers
                 var uri = new Uri($"{activationContext.ApplicationName}/StatelessDemo");
                 var service = ServiceProxy.Create<IStatelessDemo>(uri);
 
+                logger.LogInformation(LoggingEvents.REQUEST, "Calling {uri}", uri);
+
                 return await service.HelloWorldAsync();
             }
             catch (Exception ex)
             {
+                logger.LogError(LoggingEvents.EXCEPTION, ex, ex.Message);
                 ServiceEventSource.Current.ServiceCriticalError(ex);
             }
 
@@ -34,7 +46,11 @@ namespace WebApi.Controllers
         [HttpGet("CreateCriticalException")]
         public void CreateCriticalException()
         {
-            ServiceEventSource.Current.ServiceCriticalError(new InvalidOperationException("demo exception", new ArgumentNullException("demo innerexception")));
+            var ex = new InvalidOperationException("demo exception", new ArgumentNullException("demo innerexception"));
+
+            logger.LogCritical(LoggingEvents.EXCEPTION, ex, ex.Message);
+
+            ServiceEventSource.Current.ServiceCriticalError(ex);
         }
 
         [HttpGet("CreateUnhandledException")]
