@@ -5,6 +5,7 @@ using ServiceInterfaces;
 using System;
 using System.Fabric;
 using System.Threading.Tasks;
+using ServiceFabric.Logging.Remoting;
 
 namespace WebApi.Controllers
 {
@@ -22,7 +23,7 @@ namespace WebApi.Controllers
         [HttpGet]
         public Task<int> Get(int a, int b)
         {
-            var uri = new Uri($"{FabricRuntime.GetActivationContext().ApplicationName}/Stateless");
+            var uri = new Uri($"{FabricRuntime.GetActivationContext().ApplicationName}/MyStateless");
             return serviceRemoting.CallAsync<IMyService, int>(HttpContext.TraceIdentifier, uri, service => service.CalculateSum(a, b));
         }
     }

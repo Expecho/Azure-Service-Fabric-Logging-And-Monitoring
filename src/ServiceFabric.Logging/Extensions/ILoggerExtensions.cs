@@ -35,7 +35,7 @@ namespace ServiceFabric.Logging.Extensions
             where TService : IService
         {
             logger.LogInformation((int) ServiceFabricEvent.ServiceRequest,
-                $"The call to {{{DependencyProperties.Type}}} dependency {{{DependencyProperties.DependencyTypeName}}} named {{{DependencyProperties.Name}}} finished in {{{DependencyProperties.DurationInMs}}} ms (success: {{{DependencyProperties.Success}}})",
+                $"The call to {{{DependencyProperties.Type}}} dependency {{{DependencyProperties.DependencyTypeName}}} named {{{DependencyProperties.Name}}} finished in {{{DependencyProperties.DurationInMs}}} ms (success: {{{DependencyProperties.Success}}}) ({{{DependencyProperties.StartTime}}})",
                 "ServiceFabric",
                 typeof(TService).FullName,
                 ((MethodCallExpression)callMethod.Body).Method.ToString(),
