@@ -10,7 +10,7 @@ It uses a structured logging framework called [Serilog](https://serilog.net/) to
 
 # How it works
 
-.Net Core provides [a logging abstraction](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/logging) that provides support for structured logging. Since Serilog is supported by the .Net Core logging abstraction this repository uses this framework.
+.Net Core provides [a logging abstraction](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/logging) that provides support for structured logging. Since Serilog is supported by the .Net Core logging abstraction we can seperate the calls to the logger from the actual implementation. (For more background about this, read [this excellent blog post](https://msdn.microsoft.com/en-us/magazine/mt694089.aspx))
 
 By using custom Middleware in the ASP.Net Core pipeline we can capture the trace id of the request and use that in the logging to correlate log events. Calls from the Web Api to the other stateless service are intercepted and logged based on the answers in [this](http://stackoverflow.com/questions/34166193/how-to-add-message-header-to-the-request-when-using-default-client-of-azure-serv) StackOverflow question.
 
