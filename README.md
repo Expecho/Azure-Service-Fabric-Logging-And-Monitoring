@@ -8,6 +8,14 @@ The application consist of two stateless services, one hosting an ASP.Net Core a
 
 It uses a structured logging framework called [Serilog](https://serilog.net/) to log events. The logged events are then written to [Application Insights](https://azure.microsoft.com/en-us/services/application-insights/) using [this](https://github.com/serilog/serilog-sinks-applicationinsights) Serilog sink. By using Serilog to capture the events instead of logging directly to Application Insights using the SDK it is easy to add different outputs for the logged events.
 
+# How it works
+
+.Net Core provides [a logging abstraction](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/logging) that provides support for structured logging. Since Serilog is supported by the .Net Core logging abstraction this repository uses this framework.
+
+By using custom Middleware in the ASP.Net Core pipeline we can capture the trace id of the request and use that in the logging to correlate log events. Calls from the Web Api to the other stateless service are intercepted and logged based on the answers in [this](http://stackoverflow.com/questions/34166193/how-to-add-message-header-to-the-request-when-using-default-client-of-azure-serv) StackOverflow question.
+
+Most other logging frameworks provide Application Insights sinks that are only capable of writing Trace entities to Application Insights. Using structured logging gives the advantage to transform the log events to specific Application Insights entities like Requests, Dependencies, Metrics and Exceptions. This is done by the [TelemetryBuilder](/src/ServiceFabric.Logging/ApplicationInsights/TelemetryBuilder.cs) class.
+
 # Getting started
 
 Before running the sample [create a new Application Insights resource](https://docs.microsoft.com/en-us/azure/application-insights/app-insights-create-new-resource) and copy the Instrumentation Key to the application parameter in the [Service Fabric Application manifest file](/src/AzureServiceFabric.Demo.Diagnostics/ApplicationPackageRoot/ApplicationManifest.xml#L6):
