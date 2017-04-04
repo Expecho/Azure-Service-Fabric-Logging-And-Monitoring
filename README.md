@@ -21,7 +21,11 @@ Before running the sample [create a new Application Insights resource](https://d
   </Parameters>
   ```
 
-Deploy the application and point the browser to the web api at http://localhost:8700/api/values?a=1&b=2
+Deploy the application, wait for all services to be up and running and point the browser to the web api at http://localhost:8700/api/values?a=1&b=2
+
+Observe the events written to application insights:
+
+![Application Insights](/blobs/app-insights.PNG )
 
 # Additional Resources
 
