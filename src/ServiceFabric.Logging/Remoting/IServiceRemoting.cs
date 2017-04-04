@@ -3,7 +3,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.ServiceFabric.Services.Remoting;
 
-namespace ServiceFabric.Logging
+namespace ServiceFabric.Logging.Remoting
 {
     public interface IServiceRemoting
     {

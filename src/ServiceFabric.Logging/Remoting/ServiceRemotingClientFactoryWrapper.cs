@@ -8,7 +8,7 @@ using Microsoft.ServiceFabric.Services.Communication.Client;
 using Microsoft.ServiceFabric.Services.Remoting;
 using Microsoft.ServiceFabric.Services.Remoting.Client;
 
-namespace ServiceFabric.Logging
+namespace ServiceFabric.Logging.Remoting
 {
     internal class ServiceRemotingClientFactoryWrapper : IServiceRemotingClientFactory
     {
@@ -55,27 +55,26 @@ namespace ServiceFabric.Logging
 
         private class ServiceRemotingClientWrapper : IServiceRemotingClient
         {
-            private readonly IServiceRemotingClient client;
-            private string traceId;
+            private readonly string traceId;
 
             public ServiceRemotingClientWrapper(IServiceRemotingClient client, string traceId)
             {
-                this.client = client;
+                this.Client = client;
                 this.traceId = traceId;
             }
 
-            internal IServiceRemotingClient Client => client;
+            internal IServiceRemotingClient Client { get; }
 
             public ResolvedServiceEndpoint Endpoint
             {
                 get
                 {
-                    return client.Endpoint;
+                    return Client.Endpoint;
                 }
 
                 set
                 {
-                    client.Endpoint = value;
+                    Client.Endpoint = value;
                 }
             }
 
@@ -83,12 +82,12 @@ namespace ServiceFabric.Logging
             {
                 get
                 {
-                    return client.ListenerName;
+                    return Client.ListenerName;
                 }
 
                 set
                 {
-                    client.ListenerName = value;
+                    Client.ListenerName = value;
                 }
             }
 
@@ -96,27 +95,27 @@ namespace ServiceFabric.Logging
             {
                 get
                 {
-                    return client.ResolvedServicePartition;
+                    return Client.ResolvedServicePartition;
                 }
 
                 set
                 {
-                    client.ResolvedServicePartition = value;
+                    Client.ResolvedServicePartition = value;
                 }
             }
 
             public Task<byte[]> RequestResponseAsync(ServiceRemotingMessageHeaders messageHeaders, byte[] requestBody)
             {
-                messageHeaders.AddHeader("X-Fabric-TraceId", Encoding.ASCII.GetBytes(traceId));
+                messageHeaders.AddHeader(HeaderIdentifiers.TraceId, Encoding.ASCII.GetBytes(traceId));
 
-                return client.RequestResponseAsync(messageHeaders, requestBody);
+                return Client.RequestResponseAsync(messageHeaders, requestBody);
             }
 
             public void SendOneWay(ServiceRemotingMessageHeaders messageHeaders, byte[] requestBody)
             {
-                messageHeaders.AddHeader("X-Fabric-TraceId", Encoding.ASCII.GetBytes(traceId));
+                messageHeaders.AddHeader(HeaderIdentifiers.TraceId, Encoding.ASCII.GetBytes(traceId));
 
-                client.SendOneWay(messageHeaders, requestBody);
+                Client.SendOneWay(messageHeaders, requestBody);
             }
         }
     }

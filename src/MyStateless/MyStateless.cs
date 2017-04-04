@@ -2,12 +2,13 @@
 using Microsoft.ServiceFabric.Services.Communication.Runtime;
 using Microsoft.ServiceFabric.Services.Remoting.Wcf.Runtime;
 using Microsoft.ServiceFabric.Services.Runtime;
-using ServiceFabric.Logging.RemotingServiceDispatcher;
 using ServiceInterfaces;
 using System.Collections.Generic;
 using System.Fabric;
+using System.Runtime.Remoting.Messaging;
 using System.Threading.Tasks;
-using ServiceFabric.Logging.Extensions;
+using ServiceFabric.Logging;
+using ServiceFabric.Logging.Remoting;
 
 namespace MyStateless
 {
@@ -17,8 +18,7 @@ namespace MyStateless
     internal sealed class MyStateless : StatelessService, IMyService
     {
         private readonly ILogger logger;
-        private int requestCount;
-
+        
         public MyStateless(StatelessServiceContext context, ILogger logger)
             : base(context)
         {
@@ -38,7 +38,9 @@ namespace MyStateless
 
         public Task<int> CalculateSum(int a, int b)
         {
-            logger.LogMetric("Times requested", ++requestCount);
+            var traceId = CallContext.LogicalGetData(HeaderIdentifiers.TraceId);
+
+            logger.LogTrace($"Hello from inside {nameof(MyStateless)} (traceId {traceId})");
 
             return Task.FromResult(a + b);
         }

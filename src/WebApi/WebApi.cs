@@ -13,6 +13,7 @@ using Microsoft.ServiceFabric.Services.Communication.Runtime;
 using Microsoft.ServiceFabric.Services.Runtime;
 using ServiceFabric.Logging;
 using ServiceFabric.Logging.Extensions;
+using ServiceFabric.Logging.Remoting;
 
 namespace WebApi
 {

@@ -38,4 +38,8 @@
     <PackageReference Include="Serilog.Sinks.Trace" Version="2.1.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="RemotingServiceDispatcher\" />
+  </ItemGroup>
+
 </Project>

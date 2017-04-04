@@ -8,7 +8,7 @@ using Microsoft.ServiceFabric.Services.Remoting.Client;
 using Microsoft.ServiceFabric.Services.Remoting.Wcf.Client;
 using ServiceFabric.Logging.Extensions;
 
-namespace ServiceFabric.Logging
+namespace ServiceFabric.Logging.Remoting
 {
     public class ServiceRemoting : IServiceRemoting
     {
