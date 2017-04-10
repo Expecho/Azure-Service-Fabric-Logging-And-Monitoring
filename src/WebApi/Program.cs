@@ -4,6 +4,7 @@ using System.Fabric;
 using System.Threading;
 using Microsoft.Extensions.Logging;
 using ServiceFabric.Logging;
+using ServiceFabric.Logging.ApplicationInsights;
 using ServiceFabric.Logging.Extensions;
 
 namespace WebApi
@@ -17,6 +18,15 @@ namespace WebApi
         {
             ILogger logger = null;
 
+            var applicationInsightsKey = FabricRuntime.GetActivationContext()
+                .GetConfigurationPackageObject("Config")
+                .Settings
+                .Sections["ConfigurationSection"]
+                .Parameters["ApplicationInsightsKey"]
+                .Value;
+
+            new LiveStreamProvider(applicationInsightsKey).Enable();
+
             try
             {
                 // The ServiceManifest.XML file defines one or more service type names.
@@ -27,13 +37,6 @@ namespace WebApi
                 ServiceRuntime.RegisterServiceAsync("WebApiType",
                     context =>
                     {
-                        var applicationInsightsKey = FabricRuntime.GetActivationContext()
-                            .GetConfigurationPackageObject("Config")
-                            .Settings
-                            .Sections["ConfigurationSection"]
-                            .Parameters["ApplicationInsightsKey"]
-                            .Value;
-
                         var loggerFactory = new LoggerFactoryBuilder(context).CreateLoggerFactory(applicationInsightsKey);
                         logger = loggerFactory.CreateLogger<WebApi>();
 

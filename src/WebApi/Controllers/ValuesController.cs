@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using ServiceFabric.Logging;
 using ServiceInterfaces;
 using System;
 using System.Fabric;
