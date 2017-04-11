@@ -28,7 +28,34 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.ApplicationInsights.PerfCounterCollector" Version="2.2.0" />
+    <None Remove="ExternalDependencies\Microsoft.ApplicationInsights.Extensions.Base_x86.dll" />
+    <None Remove="ExternalDependencies\Microsoft.ApplicationInsights.ExtensionsHost_x86.dll" />
+    <None Remove="ExternalDependencies\Microsoft.Diagnostics.Instrumentation.Extensions.Base.dll" />
+    <None Remove="ExternalDependencies\Microsoft.InstrumentationEngine.Extensions.config" />
+    <None Remove="ExternalDependencies\MicrosoftInstrumentationEngine_x86.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="ExternalDependencies\Microsoft.ApplicationInsights.Extensions.Base_x86.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExternalDependencies\Microsoft.ApplicationInsights.ExtensionsHost_x86.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExternalDependencies\Microsoft.Diagnostics.Instrumentation.Extensions.Base.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExternalDependencies\Microsoft.InstrumentationEngine.Extensions.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExternalDependencies\MicrosoftInstrumentationEngine_x86.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.ApplicationInsights.DependencyCollector" Version="2.3.0" />
+    <PackageReference Include="Microsoft.ApplicationInsights.PerfCounterCollector" Version="2.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="1.1.1" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="1.1.1" />
     <PackageReference Include="Microsoft.ServiceFabric" Version="5.5.216" />
@@ -37,6 +64,12 @@
     <PackageReference Include="Serilog.Extensions.Logging" Version="1.4.0" />
     <PackageReference Include="Serilog.Sinks.ApplicationInsights" Version="2.2.1" />
     <PackageReference Include="Serilog.Sinks.Trace" Version="2.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="ExternalDependencies\Microsoft.ApplicationInsights.Extensions.Base_x86.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

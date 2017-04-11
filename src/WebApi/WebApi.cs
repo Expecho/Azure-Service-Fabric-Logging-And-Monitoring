@@ -31,7 +31,7 @@ namespace WebApi
         /// <returns>The collection of listeners.</returns>
         protected override IEnumerable<ServiceInstanceListener> CreateServiceInstanceListeners()
         {
-            return new ServiceInstanceListener[]
+            return new[]
             {
                 new ServiceInstanceListener(serviceContext =>
                     new WebListenerCommunicationListener(serviceContext, "ServiceEndpoint", (url, listener) =>

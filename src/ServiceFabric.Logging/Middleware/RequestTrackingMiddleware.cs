@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Fabric;
 using System.Globalization;
+using System.Runtime.Remoting.Messaging;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -29,6 +30,8 @@ namespace ServiceFabric.Logging.Middleware
                 [SharedProperties.TraceId] = context.Request.HttpContext.TraceIdentifier
             }))
             {
+                CallContext.LogicalSetData(HeaderIdentifiers.TraceId, context.Request.HttpContext.TraceIdentifier);
+
                 AddTracingDetailsOnRequest(context, serviceContext);
                 
                 var stopwatch = Stopwatch.StartNew();

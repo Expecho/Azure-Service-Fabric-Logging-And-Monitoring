@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Fabric;
 using System.Globalization;
@@ -63,17 +64,18 @@ namespace ServiceFabric.Logging.ApplicationInsights
         {
             var requestTelemetry = new RequestTelemetry
             {
-                HttpMethod = TryGetStringValue(ApiRequestProperties.Method),
                 ResponseCode = TryGetStringValue(ApiRequestProperties.StatusCode),
                 Url = new Uri($"{TryGetStringValue(ApiRequestProperties.Scheme)}://{TryGetStringValue(ApiRequestProperties.Host)}{TryGetStringValue(ApiRequestProperties.Path)}"),
                 Name = $"{TryGetStringValue(ApiRequestProperties.Method)} {TryGetStringValue(ApiRequestProperties.Path)}",
-                StartTime = DateTime.Parse(TryGetStringValue(ApiRequestProperties.StartTime)),
+                Timestamp = DateTime.Parse(TryGetStringValue(ApiRequestProperties.StartTime)),
                 Duration = TimeSpan.FromMilliseconds(double.Parse(TryGetStringValue(ApiRequestProperties.DurationInMs))),
                 Success = bool.Parse(TryGetStringValue(ApiRequestProperties.Success))
             };
 
             requestTelemetry.Context.Operation.Name = requestTelemetry.Name;
             requestTelemetry.Id = TryGetStringValue(SharedProperties.TraceId);
+
+            AddLogEventProperties(requestTelemetry, typeof(ApiRequestProperties).GetFields().Select(f => f.GetRawConstantValue().ToString()));
 
             return requestTelemetry;
         }
@@ -84,14 +86,16 @@ namespace ServiceFabric.Logging.ApplicationInsights
             {
                 Name = TryGetStringValue(DependencyProperties.DependencyTypeName),
                 Duration = TimeSpan.FromMilliseconds(double.Parse(TryGetStringValue(DependencyProperties.DurationInMs))),
-                CommandName = TryGetStringValue(DependencyProperties.Name),
+                Data = TryGetStringValue(DependencyProperties.Name),
                 Success = bool.Parse(TryGetStringValue(DependencyProperties.Success)),
-                StartTime = DateTime.Parse(TryGetStringValue(DependencyProperties.StartTime)),
-                DependencyKind = TryGetStringValue(DependencyProperties.Type)
+                Type = TryGetStringValue(DependencyProperties.Type),
+                Timestamp = DateTime.Parse(TryGetStringValue(DependencyProperties.StartTime)),
             };
 
-            dependencyTelemetry.Id = dependencyTelemetry.CommandName;
+            dependencyTelemetry.Id = dependencyTelemetry.Data;
             dependencyTelemetry.Context.Operation.Name = dependencyTelemetry.Name;
+
+            AddLogEventProperties(dependencyTelemetry, typeof(DependencyProperties).GetFields().Select(f => f.GetRawConstantValue().ToString()));
 
             return dependencyTelemetry;
         }
@@ -101,7 +105,8 @@ namespace ServiceFabric.Logging.ApplicationInsights
             var metricTelemetry = new MetricTelemetry()
             {
                 Name = TryGetStringValue(MetricProperties.Name),
-                Value = double.Parse(TryGetStringValue(MetricProperties.Value))
+                Sum = double.Parse(TryGetStringValue(MetricProperties.Value)),
+                Timestamp = logEvent.Timestamp
             };
 
             if (logEvent.Properties.TryGetValue(MetricProperties.MinValue, out LogEventPropertyValue min))
@@ -110,6 +115,8 @@ namespace ServiceFabric.Logging.ApplicationInsights
             if (logEvent.Properties.TryGetValue(MetricProperties.MaxValue, out LogEventPropertyValue max))
                 metricTelemetry.Max = double.Parse(max.ToString());
 
+            AddLogEventProperties(metricTelemetry, typeof(MetricProperties).GetFields().Select(f => f.GetRawConstantValue().ToString()));
+
             return metricTelemetry;
         }
 
@@ -117,7 +124,8 @@ namespace ServiceFabric.Logging.ApplicationInsights
         {
             var exceptionTelemetry = new ExceptionTelemetry(logEvent.Exception)
             {
-                SeverityLevel = logEvent.Level.ToSeverityLevel()
+                SeverityLevel = logEvent.Level.ToSeverityLevel(),
+                Timestamp = logEvent.Timestamp
             };
 
             AddLogEventProperties(exceptionTelemetry);
@@ -129,7 +137,8 @@ namespace ServiceFabric.Logging.ApplicationInsights
         {
             var traceTelemetry = new TraceTelemetry(logEvent.RenderMessage())
             {
-                SeverityLevel = logEvent.Level.ToSeverityLevel()
+                SeverityLevel = logEvent.Level.ToSeverityLevel(),
+                Timestamp = logEvent.Timestamp
             };
 
             AddLogEventProperties(traceTelemetry);
@@ -139,7 +148,6 @@ namespace ServiceFabric.Logging.ApplicationInsights
 
         private void SetContextProperties(ITelemetry telemetry)
         {
-            telemetry.Timestamp = logEvent.Timestamp;
             telemetry.Context.Cloud.RoleName = context.NodeContext.NodeName;
             telemetry.Context.Cloud.RoleInstance = context.NodeContext.NodeInstanceId.ToString(CultureInfo.InvariantCulture);
             telemetry.Context.Component.Version = context.CodePackageActivationContext.CodePackageVersion;
@@ -161,22 +169,23 @@ namespace ServiceFabric.Logging.ApplicationInsights
             }
         }
 
-        private void AddLogEventProperties(ISupportProperties telemetry)
+        private void AddLogEventProperties(ISupportProperties telemetry, IEnumerable<string> excludePropertyKeys = null)
         {
+            var excludedPropertyKeys = new List<string>
+            {
+                nameof(context.NodeContext.NodeName),
+                nameof(context.CodePackageActivationContext.CodePackageVersion)
+            };
+
+            if(excludePropertyKeys != null)
+                excludedPropertyKeys.AddRange(excludePropertyKeys);
+
             foreach (var property in logEvent
                 .Properties
-                .Where(property => property.Value != null && !telemetry.Properties.ContainsKey(property.Key)))
+                .Where(property => property.Value != null && !excludedPropertyKeys.Contains(property.Key) && !telemetry.Properties.ContainsKey(property.Key)))
             {
                 ApplicationInsightsPropertyFormatter.WriteValue(property.Key, property.Value, telemetry.Properties);
             }
-        }
-
-        private LogEventPropertyValue TryGetPropertyValue(string propertyName)
-        {
-            if (!logEvent.Properties.TryGetValue(propertyName, out LogEventPropertyValue value))
-                throw new ArgumentException($"LogEvent does not contain required property {propertyName} for EventId {logEvent.Properties[SharedProperties.EventId]}", propertyName);
-
-            return value;
         }
 
         private string TryGetStringValue(string propertyName)
