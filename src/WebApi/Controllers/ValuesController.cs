@@ -25,6 +25,9 @@ namespace WebApi.Controllers
         {
             var uri = new Uri($"{FabricRuntime.GetActivationContext().ApplicationName}/MyStateless");
             var sum = await serviceRemoting.CallAsync<IMyService, int>(HttpContext.TraceIdentifier, uri, service => service.CalculateSum(a, b));
+
+            await new HttpClient().GetAsync("http://www.google.nl");
+
             return sum;
         }
     }

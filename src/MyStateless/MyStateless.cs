@@ -5,6 +5,7 @@ using Microsoft.ServiceFabric.Services.Runtime;
 using ServiceInterfaces;
 using System.Collections.Generic;
 using System.Fabric;
+using System.Net.Http;
 using System.Runtime.Remoting.Messaging;
 using System.Threading.Tasks;
 using ServiceFabric.Logging;
@@ -36,13 +37,15 @@ namespace MyStateless
                             new TracingEnabledRemotingServiceDispatcher(context, this),null,"ServiceEndpoint")) };
         }
 
-        public Task<int> CalculateSum(int a, int b)
+        public async Task<int> CalculateSum(int a, int b)
         {
             var traceId = CallContext.LogicalGetData(HeaderIdentifiers.TraceId);
 
             logger.LogTrace($"Hello from inside {nameof(MyStateless)} (traceId {traceId})");
 
-            return Task.FromResult(a + b);
+            await new HttpClient().GetAsync("http://www.nu.nl");
+
+            return a + b;
         }
     }
 }
