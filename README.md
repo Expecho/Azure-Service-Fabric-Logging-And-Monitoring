@@ -41,10 +41,10 @@ Deploy the application, wait for all services to be up and running and point the
 
 Observe the events written to application insights:
 
-![Application Insights](/blobs/app-insights.PNG )
+![Application Insights](blobs/app-insights.PNG?raw=true )
 
 
-![Application Insights Live Metrics Stream](/blobs/live-metrics.PNG )
+![Application Insights Live Metrics Stream](blobs/live-metrics.PNG?raw=true )
 
 # Additional Resources
 
