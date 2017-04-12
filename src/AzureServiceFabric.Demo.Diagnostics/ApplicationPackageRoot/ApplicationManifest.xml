@@ -3,7 +3,7 @@
   <Parameters>
     <Parameter Name="WebApi_InstanceCount" DefaultValue="-1" />
     <Parameter Name="MyStateless_InstanceCount" DefaultValue="-1" />
-    <Parameter Name="ApplicationInsightsKey" DefaultValue="ea607a3e-bd03-4080-8ca9-2c5d91724769" />
+    <Parameter Name="ApplicationInsightsKey" DefaultValue="[Your-Application-Insigths-Instrumentation-Key]" />
   </Parameters>
   <!-- Import the ServiceManifest from the ServicePackage. The ServiceManifestName and ServiceManifestVersion 
        should match the Name and Version attributes of the ServiceManifest element defined in the 
