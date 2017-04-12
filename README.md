@@ -16,7 +16,15 @@ By using [custom Middleware](/src/ServiceFabric.Logging/Middleware/RequestTracki
 
 Most other logging frameworks provide Application Insights sinks that are only capable of writing Trace entities to Application Insights. Using structured logging gives the advantage to transform the log events to specific Application Insights entities like Requests, Dependencies, Metrics and Exceptions. This is done by the [TelemetryBuilder](/src/ServiceFabric.Logging/ApplicationInsights/TelemetryBuilder.cs) class.
 
+# Features
+ - Full Application Insights Integration
+ - Structured Logging
+ - Easy to add other sinks
+ - Integration with .Net Core logging framework
+ 
 # Getting started
+
+This source is build and tested using Azure Service Fabric 5.5 and SDK 2.5, with Visual Studio 2017 v15.1
 
 Before running the sample [create a new Application Insights resource](https://docs.microsoft.com/en-us/azure/application-insights/app-insights-create-new-resource) and copy the Instrumentation Key to the application parameter in the [Service Fabric Application manifest file](/src/AzureServiceFabric.Demo.Diagnostics/ApplicationPackageRoot/ApplicationManifest.xml#L6):
 
@@ -34,6 +42,9 @@ Deploy the application, wait for all services to be up and running and point the
 Observe the events written to application insights:
 
 ![Application Insights](/blobs/app-insights.PNG )
+
+
+![Application Insights Live Metrics Stream](/blobs/live-metrics.PNG )
 
 # Additional Resources
 
