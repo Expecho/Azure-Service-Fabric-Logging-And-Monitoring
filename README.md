@@ -1,6 +1,6 @@
 # Overview
 
-This repository contains an Azure Service Fabric application that provides some guidance and examples on how to setup and configure logging and demonstrates some approaches. 
+This repository contains an Azure Service Fabric application that provides some guidance and examples on how to setup and configure logging and demonstrates some approaches. It is probably not production ready but it gives a working overview on how things are working together. Please see it as a good starting point for your own integration.
 
 The application consist of two stateless services, one hosting an ASP.Net Core application that acts as an Web Api and a stateless service that is being called from the Web Api using [Service Remoting](https://docs.microsoft.com/en-us/azure/service-fabric/service-fabric-reliable-services-communication-remoting).
 
