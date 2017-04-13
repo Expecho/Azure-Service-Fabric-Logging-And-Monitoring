@@ -11,5 +11,6 @@
         public const string Response = "Response";
         public const string Success = "Success";
         public const string StartTime = "StartTime";
+        public const string Headers = "Headers";
     }
 }

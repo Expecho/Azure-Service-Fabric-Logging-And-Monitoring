@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq.Expressions;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -13,7 +14,7 @@ namespace ServiceFabric.Logging.Extensions
     {
         public static void LogMetric(this ILogger logger, string name, double value)
         {
-            logger.LogInformation((int) ServiceFabricEvent.Metric,
+            logger.LogInformation(ServiceFabricEvent.Metric,
                 $"Metric {{{MetricProperties.Name}}}, value: {{{MetricProperties.Value}}}",
                 name,
                 value);
@@ -22,7 +23,7 @@ namespace ServiceFabric.Logging.Extensions
         public static void LogMetric(this ILogger logger, string name, double value, double? max = null,
             double? min = null)
         {
-            logger.LogInformation((int) ServiceFabricEvent.Metric,
+            logger.LogInformation(ServiceFabricEvent.Metric,
                 $"Metric {{{MetricProperties.Name}}}, value: {{{MetricProperties.Value}}}, min: {{{MetricProperties.MinValue}}}, max: {{{MetricProperties.MaxValue}}}",
                 name,
                 value,
@@ -34,7 +35,7 @@ namespace ServiceFabric.Logging.Extensions
             Expression<Func<TService, Task<TResult>>> callMethod, DateTime started, TimeSpan duration, bool success)
             where TService : IService
         {
-            logger.LogInformation((int) ServiceFabricEvent.ServiceRequest,
+            logger.LogInformation(ServiceFabricEvent.ServiceRequest,
                 $"The call to {{{DependencyProperties.Type}}} dependency {{{DependencyProperties.DependencyTypeName}}} named {{{DependencyProperties.Name}}} finished in {{{DependencyProperties.DurationInMs}}} ms (success: {{{DependencyProperties.Success}}}) ({{{DependencyProperties.StartTime}}})",
                 "ServiceFabric",
                 typeof(TService).FullName,
@@ -47,7 +48,7 @@ namespace ServiceFabric.Logging.Extensions
         public static void LogDependency<TService>(this ILogger logger, Expression<Func<TService, Task>> callMethod,
             DateTime started, TimeSpan duration, bool success) where TService : IService
         {
-            logger.LogInformation((int) ServiceFabricEvent.ServiceRequest,
+            logger.LogInformation(ServiceFabricEvent.ServiceRequest,
                 $"The call to {{{DependencyProperties.Type}}} dependency {{{DependencyProperties.DependencyTypeName}}} named {{{DependencyProperties.Name}}} finished in {{{DependencyProperties.DurationInMs}}} ms (success: {{{DependencyProperties.Success}}}) ({{{DependencyProperties.StartTime}}})",
                 "ServiceFabric",
                 typeof(TService).FullName,
@@ -59,8 +60,18 @@ namespace ServiceFabric.Logging.Extensions
 
         public static void LogRequest(this ILogger logger, HttpContext context, DateTime started, TimeSpan duration, bool success)
         {
-            logger.LogInformation((int) ServiceFabricEvent.ApiRequest,
-                $"The {{{ApiRequestProperties.Method}}} action to {{{ApiRequestProperties.Scheme}}}{{{ApiRequestProperties.Host}}}{{{ApiRequestProperties.Path}}} finished in {{{ApiRequestProperties.DurationInMs}}} ms with status code {{{ApiRequestProperties.StatusCode}}}({{{ApiRequestProperties.Success}}}) ({{{ApiRequestProperties.Response}}}) ({{{ApiRequestProperties.StartTime}}})",
+            var headers = new StringBuilder();
+            foreach (string key in context.Request.Headers.Keys)
+            {
+                string value = context.Request.Headers[key];
+                if (!string.IsNullOrEmpty(value))
+                {
+                    headers.AppendLine($"{key}={value}");
+                }
+            }
+
+            logger.LogInformation(ServiceFabricEvent.ApiRequest,
+                $"The {{{ApiRequestProperties.Method}}} action to {{{ApiRequestProperties.Scheme}}}{{{ApiRequestProperties.Host}}}{{{ApiRequestProperties.Path}}} finished in {{{ApiRequestProperties.DurationInMs}}} ms with status code {{{ApiRequestProperties.StatusCode}}}({{{ApiRequestProperties.Success}}}) ({{{ApiRequestProperties.Response}}}) ({{{ApiRequestProperties.StartTime}}})  Headers: {{{ApiRequestProperties.Headers}}}",
                 context.Request.Method,
                 context.Request.Scheme,
                 context.Request.Host.Value,
@@ -69,30 +80,31 @@ namespace ServiceFabric.Logging.Extensions
                 context.Response.StatusCode,
                 success,
                 context.Response,
-                started);
+                started,
+                headers);
         }
 
         public static void LogStatelessServiceStartedListening<T>(this ILogger logger, string endpoint) where T : StatelessService
         {
-            logger.LogInformation((int) ServiceFabricEvent.ServiceListening,
+            logger.LogInformation(ServiceFabricEvent.ServiceListening,
                 "The stateless service {ServiceType} started listening (endpoint {Endpoint})", typeof(T).FullName, endpoint);
         }
 
         public static void LogStatefulServiceStartedListening<T>(this ILogger logger, string endpoint) where T : StatefulService
         {
-            logger.LogInformation((int) ServiceFabricEvent.ServiceListening,
+            logger.LogInformation(ServiceFabricEvent.ServiceListening,
                "The stateful service {ServiceType} started listening (endpoint {Endpoint})", typeof(T).FullName, endpoint);
         }
 
         public static void LogStatelessServiceInitalizationFailed<T>(this ILogger logger, Exception exception) where T : StatelessService
         {
-            logger.LogCritical((int)ServiceFabricEvent.ServiceInitializationFailed, exception,
+            logger.LogCritical(ServiceFabricEvent.ServiceInitializationFailed, exception,
                 "The stateless service {ServiceType} failed to initialize.", typeof(T).FullName);
         }
 
         public static void LogStatefulServiceInitalizationFailed<T>(this ILogger logger, Exception exception) where T : StatefulService
         {
-            logger.LogCritical((int)ServiceFabricEvent.ServiceInitializationFailed, exception,
+            logger.LogCritical(ServiceFabricEvent.ServiceInitializationFailed, exception,
                 "The stateful service {ServiceType} failed to initialize.", typeof(T).FullName);
         }
     }

@@ -37,6 +37,15 @@ namespace ServiceFabric.Logging
                 .LogEventToTelemetryConverter())
                 .CreateLogger();
 
+            InitContextProperties(context);
+
+            loggerFactory.AddSerilog(logger, true);
+
+            return loggerFactory;
+        }
+
+        private void InitContextProperties(ServiceContext context)
+        {
             LogContext.PushProperty(nameof(context.ServiceTypeName), context.ServiceTypeName);
             LogContext.PushProperty(nameof(context.ServiceName), context.ServiceName);
             LogContext.PushProperty(nameof(context.PartitionId), context.PartitionId);
@@ -45,10 +54,6 @@ namespace ServiceFabric.Logging
             LogContext.PushProperty(nameof(context.CodePackageActivationContext.ApplicationName), context.CodePackageActivationContext.ApplicationName);
             LogContext.PushProperty(nameof(context.CodePackageActivationContext.ApplicationTypeName), context.CodePackageActivationContext.ApplicationTypeName);
             LogContext.PushProperty(nameof(context.CodePackageActivationContext.CodePackageVersion), context.CodePackageActivationContext.CodePackageVersion);
-
-            loggerFactory.AddSerilog(logger, true);
-
-            return loggerFactory;
         }
     }
 }

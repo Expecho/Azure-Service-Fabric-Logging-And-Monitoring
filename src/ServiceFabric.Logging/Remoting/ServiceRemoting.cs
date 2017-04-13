@@ -37,7 +37,7 @@ namespace ServiceFabric.Logging.Remoting
             catch (Exception exception)
             {
                 success = false;
-                logger.LogError((int)ServiceFabricEvent.Exception, exception, exception.Message);
+                logger.LogError(ServiceFabricEvent.Exception, exception, exception.Message);
                 throw;
             }
             finally
@@ -65,7 +65,7 @@ namespace ServiceFabric.Logging.Remoting
             catch (Exception exception)
             {
                 success = false;
-                logger.LogError((int)ServiceFabricEvent.Exception, exception, exception.Message);
+                logger.LogError(ServiceFabricEvent.Exception, exception, exception.Message);
                 throw;
             }
             finally
