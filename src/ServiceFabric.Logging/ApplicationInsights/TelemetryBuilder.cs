@@ -26,33 +26,31 @@ namespace ServiceFabric.Logging.ApplicationInsights
 
         public ITelemetry LogEventToTelemetryConverter()
         {
-            ITelemetry telemetry = null;
-
-            if (logEvent.Exception != null)
-                telemetry = CreateExceptionTelemetry();
-            else if (logEvent.Properties.TryGetValue(SharedProperties.EventId, out LogEventPropertyValue value) && Enum.TryParse(((StructureValue)value).Properties[0].Value.ToString(), out ServiceFabricEvent serviceFabricEvent))
+            int serviceFabricEvent = ServiceFabricEvent.Undefined;
+            if (logEvent.Properties.TryGetValue(SharedProperties.EventId, out LogEventPropertyValue eventId))
             {
-                switch (serviceFabricEvent)
-                {
-                    case ServiceFabricEvent.ApiRequest:
-                        telemetry = CreateRequestTelemetry();
-                        break;
-                    case ServiceFabricEvent.Metric:
-                        telemetry = CreateMetricTelemetry();
-                        break;
-                    case ServiceFabricEvent.ServiceRequest:
-                    case ServiceFabricEvent.Dependency:
-                        telemetry = CreateDependencyTelemetry();
-                        break;
-                    default:
-                        telemetry = CreateTraceTelemetry();
-                        break;
-                }
+                int.TryParse(((StructureValue)eventId).Properties[0].Value.ToString(), out serviceFabricEvent);
             }
 
-            if (telemetry == null)
+            ITelemetry telemetry;
+            switch (serviceFabricEvent)
             {
-                telemetry = CreateTraceTelemetry();
+                case ServiceFabricEvent.Exception:
+                    telemetry = CreateExceptionTelemetry();
+                    break;
+                case ServiceFabricEvent.ApiRequest:
+                    telemetry = CreateRequestTelemetry();
+                    break;
+                case ServiceFabricEvent.Metric:
+                    telemetry = CreateMetricTelemetry();
+                    break;
+                case ServiceFabricEvent.ServiceRequest:
+                case ServiceFabricEvent.Dependency:
+                    telemetry = CreateDependencyTelemetry();
+                    break;
+                default:
+                    telemetry = CreateTraceTelemetry();
+                    break;
             }
 
             SetContextProperties(telemetry);
@@ -69,7 +67,8 @@ namespace ServiceFabric.Logging.ApplicationInsights
                 Name = $"{TryGetStringValue(ApiRequestProperties.Method)} {TryGetStringValue(ApiRequestProperties.Path)}",
                 Timestamp = DateTime.Parse(TryGetStringValue(ApiRequestProperties.StartTime)),
                 Duration = TimeSpan.FromMilliseconds(double.Parse(TryGetStringValue(ApiRequestProperties.DurationInMs))),
-                Success = bool.Parse(TryGetStringValue(ApiRequestProperties.Success))
+                Success = bool.Parse(TryGetStringValue(ApiRequestProperties.Success)),
+                Properties = { { ApiRequestProperties.Headers, TryGetStringValue(ApiRequestProperties.Headers) } }
             };
 
             requestTelemetry.Context.Operation.Name = requestTelemetry.Name;
