@@ -1,10 +1,10 @@
 # Overview
 
-This repository contains an Azure Service Fabric application that provides some guidance and examples on how to setup and configure logging and demonstrates some approaches. 
+This repository contains an Azure Service Fabric application that provides some guidance and examples on how to setup and configure logging and demonstrates some approaches. It is probably not production ready but it gives a working overview on how things are working together. Please see it as a good starting point for your own integration.
 
 The application consist of two stateless services, one hosting an ASP.Net Core application that acts as an Web Api and a stateless service that is being called from the Web Api using [Service Remoting](https://docs.microsoft.com/en-us/azure/service-fabric/service-fabric-reliable-services-communication-remoting).
 
-![Application Overview](/blobs/asf-application.PNG )
+![Application Overview](blobs/asf-application.PNG?raw=true )
 
 It uses a structured logging framework called [Serilog](https://serilog.net/) to log events. The logged events are then written to [Application Insights](https://azure.microsoft.com/en-us/services/application-insights/) using [this](https://github.com/serilog/serilog-sinks-applicationinsights) Serilog sink. By using Serilog to capture the events instead of logging directly to Application Insights using the SDK it is easy to add different outputs for the logged events.
 
@@ -41,10 +41,10 @@ Deploy the application, wait for all services to be up and running and point the
 
 Observe the events written to application insights:
 
-![Application Insights](/blobs/app-insights.PNG )
+![Application Insights](blobs/app-insights.PNG?raw=true )
 
 
-![Application Insights Live Metrics Stream](/blobs/live-metrics.PNG )
+![Application Insights Live Metrics Stream](blobs/live-metrics.PNG?raw=true )
 
 # Additional Resources
 
