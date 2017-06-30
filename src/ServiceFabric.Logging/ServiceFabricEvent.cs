@@ -11,5 +11,7 @@
         public const int Dependency = 1005;
         public const int ServiceListening = 1006;
         public const int ServiceInitializationFailed = 1007;
+        public const int ActorHostInitializationFailed = 1008;
+        public const int ActorMethod = 1009;
     }
 }

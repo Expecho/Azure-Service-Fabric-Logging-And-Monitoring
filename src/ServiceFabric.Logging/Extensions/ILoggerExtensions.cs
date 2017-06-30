@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Microsoft.ServiceFabric.Actors.Runtime;
 using Microsoft.ServiceFabric.Services.Remoting;
 using Microsoft.ServiceFabric.Services.Runtime;
 using ServiceFabric.Logging.PropertyMap;
@@ -84,6 +85,18 @@ namespace ServiceFabric.Logging.Extensions
                 headers);
         }
 
+        public static void LogActorMethod<TActor>(this ILogger logger, ActorMethodContext context, DateTime started, TimeSpan duration) where TActor : Actor
+        {
+            logger.LogInformation(ServiceFabricEvent.ActorMethod,
+                "The {CallType} call to actor {Actor}  method {MethodName} finished in {Duration} ms (started at ({Started}))",
+                context.CallType,
+                typeof(TActor).FullName,
+                context.MethodName,
+                duration.TotalMilliseconds,
+                started
+                );
+        }
+
         public static void LogStatelessServiceStartedListening<T>(this ILogger logger, string endpoint) where T : StatelessService
         {
             logger.LogInformation(ServiceFabricEvent.ServiceListening,
@@ -105,6 +118,12 @@ namespace ServiceFabric.Logging.Extensions
         public static void LogStatefulServiceInitalizationFailed<T>(this ILogger logger, Exception exception) where T : StatefulService
         {
             logger.LogCritical(ServiceFabricEvent.ServiceInitializationFailed, exception,
+                "The stateful service {ServiceType} failed to initialize.", typeof(T).FullName);
+        }
+
+        public static void LogActorHostInitalizationFailed<T>(this ILogger logger, Exception exception) where T : Actor
+        {
+            logger.LogCritical(ServiceFabricEvent.ActorHostInitializationFailed, exception,
                 "The stateful service {ServiceType} failed to initialize.", typeof(T).FullName);
         }
     }

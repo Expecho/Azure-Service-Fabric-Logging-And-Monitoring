@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26228.4
+VisualStudioVersion = 15.0.26430.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{A07B5EB6-E848-4116-A8D0-A826331D98C6}") = "AzureServiceFabric.Demo.Diagnostics", "AzureServiceFabric.Demo.Diagnostics\AzureServiceFabric.Demo.Diagnostics.sfproj", "{B5DBB817-3550-4CA6-9962-9FAF06AFB5B9}"
 EndProject
@@ -12,6 +12,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceFabric.Logging", "ServiceFabric.Logging\ServiceFabric.Logging.csproj", "{BBC9FF4E-E751-4F98-9281-6FDFA4745D6B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi", "WebApi\WebApi.csproj", "{B9E08917-E68B-4FF6-A419-A88EB5A28078}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyActor", "MyActor\MyActor.csproj", "{F8F2F04C-9689-48ED-A2B7-D8BA0AB96BEC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyActor.Interfaces", "MyActor.Interfaces\MyActor.Interfaces.csproj", "{07CCC4BD-73A4-4C68-B88A-1D1EE47BB0A0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,6 +63,18 @@ Global
 		{B9E08917-E68B-4FF6-A419-A88EB5A28078}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B9E08917-E68B-4FF6-A419-A88EB5A28078}.Release|x64.ActiveCfg = Release|Any CPU
 		{B9E08917-E68B-4FF6-A419-A88EB5A28078}.Release|x64.Build.0 = Release|Any CPU
+		{F8F2F04C-9689-48ED-A2B7-D8BA0AB96BEC}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{F8F2F04C-9689-48ED-A2B7-D8BA0AB96BEC}.Debug|x64.ActiveCfg = Debug|x64
+		{F8F2F04C-9689-48ED-A2B7-D8BA0AB96BEC}.Debug|x64.Build.0 = Debug|x64
+		{F8F2F04C-9689-48ED-A2B7-D8BA0AB96BEC}.Release|Any CPU.ActiveCfg = Release|x64
+		{F8F2F04C-9689-48ED-A2B7-D8BA0AB96BEC}.Release|x64.ActiveCfg = Release|x64
+		{F8F2F04C-9689-48ED-A2B7-D8BA0AB96BEC}.Release|x64.Build.0 = Release|x64
+		{07CCC4BD-73A4-4C68-B88A-1D1EE47BB0A0}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{07CCC4BD-73A4-4C68-B88A-1D1EE47BB0A0}.Debug|x64.ActiveCfg = Debug|x64
+		{07CCC4BD-73A4-4C68-B88A-1D1EE47BB0A0}.Debug|x64.Build.0 = Debug|x64
+		{07CCC4BD-73A4-4C68-B88A-1D1EE47BB0A0}.Release|Any CPU.ActiveCfg = Release|x64
+		{07CCC4BD-73A4-4C68-B88A-1D1EE47BB0A0}.Release|x64.ActiveCfg = Release|x64
+		{07CCC4BD-73A4-4C68-B88A-1D1EE47BB0A0}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

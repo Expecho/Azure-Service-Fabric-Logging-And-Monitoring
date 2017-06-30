@@ -37,14 +37,14 @@ namespace ServiceFabric.Logging
                 .LogEventToTelemetryConverter())
                 .CreateLogger();
 
-            InitContextProperties(context);
+            InitContextProperties();
 
             loggerFactory.AddSerilog(logger, true);
 
             return loggerFactory;
         }
 
-        private void InitContextProperties(ServiceContext context)
+        private void InitContextProperties()
         {
             LogContext.PushProperty(nameof(context.ServiceTypeName), context.ServiceTypeName);
             LogContext.PushProperty(nameof(context.ServiceName), context.ServiceName);
