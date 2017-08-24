@@ -1,17 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.14
+VisualStudioVersion = 15.0.26730.10
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{A07B5EB6-E848-4116-A8D0-A826331D98C6}") = "AzureServiceFabric.Demo.Diagnostics", "AzureServiceFabric.Demo.Diagnostics\AzureServiceFabric.Demo.Diagnostics.sfproj", "{B5DBB817-3550-4CA6-9962-9FAF06AFB5B9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyStateless", "MyStateless\MyStateless.csproj", "{FCFE82C2-4A37-472D-BEAE-32C8035BCFF2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceInterfaces", "ServiceInterfaces\ServiceInterfaces.csproj", "{B7687CA6-3F6B-4F15-BDDA-F385B0A944D8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceInterfaces", "ServiceInterfaces\ServiceInterfaces.csproj", "{B7687CA6-3F6B-4F15-BDDA-F385B0A944D8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceFabric.Logging", "ServiceFabric.Logging\ServiceFabric.Logging.csproj", "{BBC9FF4E-E751-4F98-9281-6FDFA4745D6B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi", "WebApi\WebApi.csproj", "{B9E08917-E68B-4FF6-A419-A88EB5A28078}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi", "WebApi\WebApi.csproj", "{B9E08917-E68B-4FF6-A419-A88EB5A28078}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyActor", "MyActor\MyActor.csproj", "{F8F2F04C-9689-48ED-A2B7-D8BA0AB96BEC}"
 EndProject
@@ -49,12 +49,12 @@ Global
 		{B7687CA6-3F6B-4F15-BDDA-F385B0A944D8}.Release|x64.Build.0 = Release|Any CPU
 		{BBC9FF4E-E751-4F98-9281-6FDFA4745D6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BBC9FF4E-E751-4F98-9281-6FDFA4745D6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BBC9FF4E-E751-4F98-9281-6FDFA4745D6B}.Debug|x64.ActiveCfg = Debug|x64
-		{BBC9FF4E-E751-4F98-9281-6FDFA4745D6B}.Debug|x64.Build.0 = Debug|x64
+		{BBC9FF4E-E751-4F98-9281-6FDFA4745D6B}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{BBC9FF4E-E751-4F98-9281-6FDFA4745D6B}.Debug|x64.Build.0 = Debug|Any CPU
 		{BBC9FF4E-E751-4F98-9281-6FDFA4745D6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BBC9FF4E-E751-4F98-9281-6FDFA4745D6B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BBC9FF4E-E751-4F98-9281-6FDFA4745D6B}.Release|x64.ActiveCfg = Release|x64
-		{BBC9FF4E-E751-4F98-9281-6FDFA4745D6B}.Release|x64.Build.0 = Release|x64
+		{BBC9FF4E-E751-4F98-9281-6FDFA4745D6B}.Release|x64.ActiveCfg = Release|Any CPU
+		{BBC9FF4E-E751-4F98-9281-6FDFA4745D6B}.Release|x64.Build.0 = Release|Any CPU
 		{B9E08917-E68B-4FF6-A419-A88EB5A28078}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B9E08917-E68B-4FF6-A419-A88EB5A28078}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B9E08917-E68B-4FF6-A419-A88EB5A28078}.Debug|x64.ActiveCfg = Debug|Any CPU
@@ -78,5 +78,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B9E3B035-91A7-4803-9150-FB76C6C3BDB3}
 	EndGlobalSection
 EndGlobal
