@@ -39,10 +39,17 @@ Before running the sample [create a new Application Insights resource](https://d
 
 Deploy the application, wait for all services to be up and running and point the browser to the web api at http://localhost:8700/api/values?a=1&b=2
 
+## Application Insights integration
+
 Observe the events written to application insights:
 
 ![Application Insights](blobs/app-insights.PNG?raw=true )
 
+All telemetry includes service fabric specific metadata:
+
+![Application Insights](blobs/app-insights-telemetrydata.PNG?raw=true )
+
+Live telemetry like cluster load (per node) and traffic can be viewed in the Live Metrics Stream:
 
 ![Application Insights Live Metrics Stream](blobs/live-metrics.PNG?raw=true )
 
