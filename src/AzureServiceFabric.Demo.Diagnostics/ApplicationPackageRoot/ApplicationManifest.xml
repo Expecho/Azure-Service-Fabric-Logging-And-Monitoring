@@ -3,7 +3,7 @@
   <Parameters>
     <Parameter Name="WebApi_InstanceCount" DefaultValue="-1" />
     <Parameter Name="MyStateless_InstanceCount" DefaultValue="-1" />
-    <Parameter Name="ApplicationInsightsKey" DefaultValue="2c79336f-8455-4458-aa4f-c62e153f67d8" />
+    <Parameter Name="ApplicationInsightsKey" DefaultValue="[Your Key Here]" />
     <Parameter Name="MyActorService_PartitionCount" DefaultValue="10" />
     <Parameter Name="MyActorService_MinReplicaSetSize" DefaultValue="3" />
     <Parameter Name="MyActorService_TargetReplicaSetSize" DefaultValue="3" />
