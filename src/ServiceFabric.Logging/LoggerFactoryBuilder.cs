@@ -1,10 +1,12 @@
 ﻿using System.Fabric;
+using System.Globalization;
 using System.Runtime.Remoting.Messaging;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Context;
 using ServiceFabric.Logging.ApplicationInsights;
+using ServiceFabric.Logging.PropertyMap;
 
 namespace ServiceFabric.Logging
 {
@@ -19,7 +21,7 @@ namespace ServiceFabric.Logging
 
         public ILoggerFactory CreateLoggerFactory(string aiKey)
         {
-            var configuration = new TelemetryConfiguration()
+            var configuration = new TelemetryConfiguration
             {
                 InstrumentationKey = aiKey
             };
@@ -33,7 +35,7 @@ namespace ServiceFabric.Logging
             var logger = new LoggerConfiguration()
                 .Enrich.FromLogContext()
                 .WriteTo
-                .ApplicationInsights(configuration, (logEvent, formatter) => new TelemetryBuilder(context, logEvent, formatter)
+                .ApplicationInsights(configuration, (logEvent, formatter) => new TelemetryBuilder(context, logEvent)
                 .LogEventToTelemetryConverter())
                 .CreateLogger();
 
@@ -46,14 +48,22 @@ namespace ServiceFabric.Logging
 
         private void InitContextProperties()
         {
-            LogContext.PushProperty(nameof(context.ServiceTypeName), context.ServiceTypeName);
-            LogContext.PushProperty(nameof(context.ServiceName), context.ServiceName);
-            LogContext.PushProperty(nameof(context.PartitionId), context.PartitionId);
-            LogContext.PushProperty(nameof(context.ReplicaOrInstanceId), context.ReplicaOrInstanceId);
-            LogContext.PushProperty(nameof(context.NodeContext.NodeName), context.NodeContext.NodeName);
-            LogContext.PushProperty(nameof(context.CodePackageActivationContext.ApplicationName), context.CodePackageActivationContext.ApplicationName);
-            LogContext.PushProperty(nameof(context.CodePackageActivationContext.ApplicationTypeName), context.CodePackageActivationContext.ApplicationTypeName);
-            LogContext.PushProperty(nameof(context.CodePackageActivationContext.CodePackageVersion), context.CodePackageActivationContext.CodePackageVersion);
+            LogContext.PushProperty(ServiceContextProperties.ServiceTypeName, context.ServiceTypeName);
+            LogContext.PushProperty(ServiceContextProperties.ServiceName, context.ServiceName);
+            LogContext.PushProperty(ServiceContextProperties.PartitionId, context.PartitionId);
+            LogContext.PushProperty(ServiceContextProperties.NodeName, context.NodeContext.NodeName);
+            LogContext.PushProperty(ServiceContextProperties.ApplicationName, context.CodePackageActivationContext.ApplicationName);
+            LogContext.PushProperty(ServiceContextProperties.ApplicationTypeName, context.CodePackageActivationContext.ApplicationTypeName);
+            LogContext.PushProperty(ServiceContextProperties.ServicePackageVersion, context.CodePackageActivationContext.CodePackageVersion);
+
+            if (context is StatelessServiceContext)
+            {
+                LogContext.PushProperty(ServiceContextProperties.InstanceId, context.ReplicaOrInstanceId.ToString(CultureInfo.InvariantCulture));
+            }
+            else if (context is StatefulServiceContext)
+            {
+                LogContext.PushProperty(ServiceContextProperties.ReplicaId, context.ReplicaOrInstanceId.ToString(CultureInfo.InvariantCulture));
+            }
         }
     }
 }

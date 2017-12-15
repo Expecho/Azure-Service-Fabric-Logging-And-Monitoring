@@ -37,5 +37,11 @@ namespace WebApi.Controllers
 
             return sum;
         }
+
+        [HttpPost]
+        public IActionResult Post([FromBody] string data)
+        {
+            return new StatusCodeResult(201);
+        }
     }
 }
