@@ -1,13 +1,12 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.ServiceFabric.Services.Communication.Runtime;
-using Microsoft.ServiceFabric.Services.Remoting.Wcf.Runtime;
 using Microsoft.ServiceFabric.Services.Runtime;
 using ServiceInterfaces;
 using System.Collections.Generic;
 using System.Fabric;
 using System.Net.Http;
-using System.Runtime.Remoting.Messaging;
 using System.Threading.Tasks;
+using Microsoft.ServiceFabric.Services.Remoting.V2.FabricTransport.Runtime;
 using ServiceFabric.Logging;
 using ServiceFabric.Logging.Remoting;
 
@@ -32,14 +31,17 @@ namespace MyStateless
         /// <returns>A collection of listeners.</returns>
         protected override IEnumerable<ServiceInstanceListener> CreateServiceInstanceListeners()
         {
-            return new[] { new ServiceInstanceListener(context =>
-                            new WcfServiceRemotingListener(context,
-                            new TracingEnabledRemotingServiceDispatcher(context, this),null,"ServiceEndpoint")) };
+            return new[]
+            {
+                new ServiceInstanceListener(context =>
+                    new FabricTransportServiceRemotingListener(context,
+                        new TracingEnabledRemotingServiceDispatcher(context, this)))
+            };
         }
 
         public async Task<int> CalculateSum(int a, int b)
         {
-            var traceId = CallContext.LogicalGetData(HeaderIdentifiers.TraceId);
+            var traceId = CallContext.GetData(HeaderIdentifiers.TraceId);
 
             logger.LogTrace($"Hello from inside {nameof(MyStateless)} (traceId {traceId})");
 

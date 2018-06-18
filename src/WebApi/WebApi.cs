@@ -38,17 +38,20 @@ namespace WebApi
                     {
                         logger.LogStatelessServiceStartedListening<WebApi>(url);
 
-                        return new WebHostBuilder().UseWebListener()
-                                    .ConfigureServices(
-                                        services => services
-                                            .AddSingleton(serviceContext)
-                                            .AddSingleton(logger)
-                                            .AddTransient<IServiceRemoting, ServiceRemoting>())
-                                    .UseContentRoot(Directory.GetCurrentDirectory())
-                                    .UseServiceFabricIntegration(listener, ServiceFabricIntegrationOptions.None)
-                                    .UseStartup<Startup>()
-                                    .UseUrls(url)
-                                    .Build();
+                        var webHost = new WebHostBuilder()
+                            .UseKestrel()
+                            .ConfigureServices(
+                                services => services
+                                    .AddSingleton(serviceContext)
+                                    .AddSingleton(logger)
+                                    .AddTransient<IServiceRemoting, ServiceRemoting>())
+                            .UseContentRoot(Directory.GetCurrentDirectory())
+                            .UseServiceFabricIntegration(listener, ServiceFabricIntegrationOptions.None)
+                            .UseStartup<Startup>()
+                            .UseUrls(url)
+                            .Build();
+
+                        return webHost;
                     }))
             };
         }

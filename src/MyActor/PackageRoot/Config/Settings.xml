@@ -8,7 +8,7 @@
     <Parameter Name="CredentialType" Value="None" />
   </Section>
   <Section Name="ConfigurationSection">
-    <Parameter Name="ApplicationInsightsKey" Value="" />
+    <Parameter Name="ApplicationInsightsKey" Value="d344821a-da7f-4d56-b69b-412ab1a9e0b0" />
   </Section>
   <!-- The content will be generated during build -->
 </Settings>

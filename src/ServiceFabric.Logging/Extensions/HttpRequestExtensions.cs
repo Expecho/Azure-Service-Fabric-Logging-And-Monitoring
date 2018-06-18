@@ -9,7 +9,7 @@ namespace ServiceFabric.Logging.Extensions
     {
         public static string ReadRequestBodyAsString(this HttpRequest request)
         {
-            string requestBodyAsText = null;
+            string requestBodyAsText = "";
 
             if (!HttpMethods.IsGet(request.Method)
                 && !HttpMethods.IsHead(request.Method)

@@ -5,24 +5,26 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.ServiceFabric.Services.Remoting;
 using Microsoft.ServiceFabric.Services.Remoting.Client;
-using Microsoft.ServiceFabric.Services.Remoting.Wcf.Client;
+using Microsoft.ServiceFabric.Services.Remoting.V2.FabricTransport.Client;
 using ServiceFabric.Logging.Extensions;
 
 namespace ServiceFabric.Logging.Remoting
 {
     public class ServiceRemoting : IServiceRemoting
     {
-        private readonly ILogger logger;
+        private readonly ILogger _logger;
 
         public ServiceRemoting(ILogger logger)
         {
-            this.logger = logger;
+            _logger = logger;
         }
 
-        public async Task<TResult> CallAsync<TService, TResult>(string traceId, Uri uri, Expression<Func<TService, Task<TResult>>> callMethod) where TService : IService
+        public async Task<TResult> CallAsync<TService, TResult>(
+            string traceId,
+            Uri uri,
+            Expression<Func<TService, Task<TResult>>> callMethod) where TService : IService
         {
-            var proxyFactory = new ServiceProxyFactory(c => new ServiceRemotingClientFactoryWrapper(traceId, 
-                            new WcfServiceRemotingClientFactory(callbackClient: c)));
+            var proxyFactory = new ServiceProxyFactory(c => new ServiceRemotingClientFactoryWrapper(traceId, new FabricTransportServiceRemotingClientFactory(remotingCallbackMessageHandler: c)));
 
             var service = proxyFactory.CreateServiceProxy<TService>(uri);
             var success = true;
@@ -37,20 +39,22 @@ namespace ServiceFabric.Logging.Remoting
             catch (Exception exception)
             {
                 success = false;
-                logger.LogError(ServiceFabricEvent.Exception, exception, exception.Message);
+                _logger.LogError(ServiceFabricEvent.Exception, exception, exception.Message);
                 throw;
             }
             finally
             {
                 stopwatch.Stop();
-                logger.LogDependency(callMethod, started, stopwatch.Elapsed, success);
+                _logger.LogDependency(callMethod, started, stopwatch.Elapsed, success);
             }
         }
 
-        public async Task CallAsync<TService>(string traceId, Uri uri, Expression<Func<TService, Task>> callMethod) where TService : IService
+        public async Task CallAsync<TService>(
+            string traceId,
+            Uri uri,
+            Expression<Func<TService, Task>> callMethod) where TService : IService
         {
-            var proxyFactory = new ServiceProxyFactory(c => new ServiceRemotingClientFactoryWrapper(traceId,
-                            new WcfServiceRemotingClientFactory(callbackClient: c)));
+            var proxyFactory = new ServiceProxyFactory(c => new ServiceRemotingClientFactoryWrapper(traceId, new FabricTransportServiceRemotingClientFactory(remotingCallbackMessageHandler: c)));
 
             var service = proxyFactory.CreateServiceProxy<TService>(uri);
             var success = true;
@@ -65,13 +69,13 @@ namespace ServiceFabric.Logging.Remoting
             catch (Exception exception)
             {
                 success = false;
-                logger.LogError(ServiceFabricEvent.Exception, exception, exception.Message);
+                _logger.LogError(ServiceFabricEvent.Exception, exception, exception.Message);
                 throw;
             }
             finally
             {
                 stopwatch.Stop();
-                logger.LogDependency(callMethod, started, stopwatch.Elapsed, success);
+                _logger.LogDependency(callMethod, started, stopwatch.Elapsed, success);
             }
         }
     }

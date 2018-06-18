@@ -32,8 +32,8 @@ namespace WebApi.Controllers
 
             await new HttpClient().GetAsync("http://www.google.nl");
 
-            var actor = ActorProxy.Create<IMyActor>(ActorId.CreateRandom());
-            await actor.GetCountAsync(CancellationToken.None);
+            //var actor = ActorProxy.Create<IMyActor>(ActorId.CreateRandom());
+            //await actor.GetCountAsync(CancellationToken.None);
 
             return sum;
         }
