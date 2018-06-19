@@ -3,12 +3,15 @@
   <Parameters>
     <Parameter Name="WebApi_InstanceCount" DefaultValue="-1" />
     <Parameter Name="MyStateless_InstanceCount" DefaultValue="-1" />
-    <Parameter Name="ApplicationInsightsKey" DefaultValue="d344821a-da7f-4d56-b69b-412ab1a9e0b0" />
-    <!--<Parameter Name="MyActorService_PartitionCount" DefaultValue="10" />
+    <Parameter Name="ApplicationInsightsKey" DefaultValue="[Your Key Here]" />
+    <Parameter Name="MyActorService_PartitionCount" DefaultValue="10" />
     <Parameter Name="MyActorService_MinReplicaSetSize" DefaultValue="3" />
-    <Parameter Name="MyActorService_TargetReplicaSetSize" DefaultValue="3" />-->
+    <Parameter Name="MyActorService_TargetReplicaSetSize" DefaultValue="3" />
   </Parameters>
-  <!--<ServiceManifestImport>
+  <!-- Import the ServiceManifest from the ServicePackage. The ServiceManifestName and ServiceManifestVersion 
+       should match the Name and Version attributes of the ServiceManifest element defined in the 
+       ServiceManifest.xml file. -->
+  <ServiceManifestImport>
     <ServiceManifestRef ServiceManifestName="MyActorPkg" ServiceManifestVersion="1.0.0" />
     <ConfigOverrides>
       <ConfigOverride Name="Config">
@@ -19,10 +22,7 @@
         </Settings>
       </ConfigOverride>
     </ConfigOverrides>
-  </ServiceManifestImport>-->
-  <!-- Import the ServiceManifest from the ServicePackage. The ServiceManifestName and ServiceManifestVersion 
-       should match the Name and Version attributes of the ServiceManifest element defined in the 
-       ServiceManifest.xml file. -->
+  </ServiceManifestImport>
   <ServiceManifestImport>
     <ServiceManifestRef ServiceManifestName="WebApiPkg" ServiceManifestVersion="1.0.0" />
     <ConfigOverrides>
@@ -63,10 +63,10 @@
         <SingletonPartition />
       </StatelessService>
     </Service>
-    <!--<Service Name="MyActorService" GeneratedIdRef="15401979-3782-48a3-b91f-4f903d0cb963|Persisted">
+    <Service Name="MyActorService" GeneratedIdRef="15401979-3782-48a3-b91f-4f903d0cb963|Persisted">
       <StatefulService ServiceTypeName="MyActorServiceType" TargetReplicaSetSize="[MyActorService_TargetReplicaSetSize]" MinReplicaSetSize="[MyActorService_MinReplicaSetSize]">
         <UniformInt64Partition PartitionCount="[MyActorService_PartitionCount]" LowKey="-9223372036854775808" HighKey="9223372036854775807" />
       </StatefulService>
-    </Service>-->
+    </Service>
   </DefaultServices>
 </ApplicationManifest>

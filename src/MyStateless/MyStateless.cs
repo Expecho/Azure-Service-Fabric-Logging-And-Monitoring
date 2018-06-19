@@ -17,12 +17,12 @@ namespace MyStateless
     /// </summary>
     internal sealed class MyStateless : StatelessService, IMyService
     {
-        private readonly ILogger logger;
+        private readonly ILogger _logger;
         
         public MyStateless(StatelessServiceContext context, ILogger logger)
             : base(context)
         {
-            this.logger = logger;
+            _logger = logger;
         }
 
         /// <summary>
@@ -39,11 +39,11 @@ namespace MyStateless
             };
         }
 
-        public async Task<int> CalculateSum(int a, int b)
+        public async Task<int> CalculateSumAsync(int a, int b)
         {
             var traceId = CallContext.GetData(HeaderIdentifiers.TraceId);
 
-            logger.LogTrace($"Hello from inside {nameof(MyStateless)} (traceId {traceId})");
+            _logger.LogTrace($"Hello from inside {nameof(MyStateless)} (traceId {traceId})");
 
             await new HttpClient().GetAsync("http://www.nu.nl");
 

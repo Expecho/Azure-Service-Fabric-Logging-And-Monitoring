@@ -36,6 +36,7 @@
     <None Include="Scripts\Deploy-FabricApplication.ps1" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MyActor\MyActor.csproj" />
     <ProjectReference Include="..\MyStateless\MyStateless.csproj" />
     <ProjectReference Include="..\WebApi\WebApi.csproj" />
   </ItemGroup>
