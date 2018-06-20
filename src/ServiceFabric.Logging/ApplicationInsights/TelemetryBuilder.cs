@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Fabric;
-using System.Globalization;
 using System.Linq;
 using Microsoft.ApplicationInsights.Channel;
 using Microsoft.ApplicationInsights.DataContracts;
@@ -15,13 +14,11 @@ namespace ServiceFabric.Logging.ApplicationInsights
     {
         private readonly ServiceContext context;
         private readonly LogEvent logEvent;
-        private readonly IFormatProvider formatProvider;
 
-        public TelemetryBuilder(ServiceContext context, LogEvent logEvent, IFormatProvider formatProvider)
+        public TelemetryBuilder(ServiceContext context, LogEvent logEvent)
         {
             this.context = context;
             this.logEvent = logEvent;
-            this.formatProvider = formatProvider;
         }
 
         public ITelemetry LogEventToTelemetryConverter()
@@ -68,7 +65,12 @@ namespace ServiceFabric.Logging.ApplicationInsights
                 Timestamp = DateTime.Parse(TryGetStringValue(ApiRequestProperties.StartTime)),
                 Duration = TimeSpan.FromMilliseconds(double.Parse(TryGetStringValue(ApiRequestProperties.DurationInMs))),
                 Success = bool.Parse(TryGetStringValue(ApiRequestProperties.Success)),
-                Properties = { { ApiRequestProperties.Headers, TryGetStringValue(ApiRequestProperties.Headers) } }
+                Properties =
+                {
+                    { ApiRequestProperties.Method, TryGetStringValue(ApiRequestProperties.Method) },
+                    { ApiRequestProperties.Headers, TryGetStringValue(ApiRequestProperties.Headers) },
+                    { ApiRequestProperties.Body,  TryGetStringValue(ApiRequestProperties.Body) }
+                }
             };
 
             requestTelemetry.Context.Operation.Name = requestTelemetry.Name;
@@ -81,7 +83,7 @@ namespace ServiceFabric.Logging.ApplicationInsights
 
         private ITelemetry CreateDependencyTelemetry()
         {
-            var dependencyTelemetry = new DependencyTelemetry()
+            var dependencyTelemetry = new DependencyTelemetry
             {
                 Name = TryGetStringValue(DependencyProperties.DependencyTypeName),
                 Duration = TimeSpan.FromMilliseconds(double.Parse(TryGetStringValue(DependencyProperties.DurationInMs))),
@@ -101,7 +103,7 @@ namespace ServiceFabric.Logging.ApplicationInsights
 
         private ITelemetry CreateMetricTelemetry()
         {
-            var metricTelemetry = new MetricTelemetry()
+            var metricTelemetry = new MetricTelemetry
             {
                 Name = TryGetStringValue(MetricProperties.Name),
                 Sum = double.Parse(TryGetStringValue(MetricProperties.Value)),
@@ -147,9 +149,17 @@ namespace ServiceFabric.Logging.ApplicationInsights
 
         private void SetContextProperties(ITelemetry telemetry)
         {
-            telemetry.Context.Cloud.RoleName = context.NodeContext.NodeName;
-            telemetry.Context.Cloud.RoleInstance = context.NodeContext.NodeInstanceId.ToString(CultureInfo.InvariantCulture);
+            telemetry.Context.Cloud.RoleName = FabricEnvironmentVariable.ServicePackageName;
+            telemetry.Context.Cloud.RoleInstance = FabricEnvironmentVariable.ServicePackageActivationId ?? FabricEnvironmentVariable.ServicePackageInstanceId;
             telemetry.Context.Component.Version = context.CodePackageActivationContext.CodePackageVersion;
+
+            if (!telemetry.Context.Properties.ContainsKey(ServiceContextProperties.NodeName))
+            {
+                if (!string.IsNullOrEmpty(FabricEnvironmentVariable.NodeName))
+                {
+                    telemetry.Context.Properties.Add(ServiceContextProperties.NodeName, FabricEnvironmentVariable.NodeName);
+                }
+            }
 
 #if Debug
             telemetry.Context.Operation.SyntheticSource = "DebugSession";
@@ -172,8 +182,8 @@ namespace ServiceFabric.Logging.ApplicationInsights
         {
             var excludedPropertyKeys = new List<string>
             {
-                nameof(context.NodeContext.NodeName),
-                nameof(context.CodePackageActivationContext.CodePackageVersion)
+                ServiceContextProperties.NodeName,
+                ServiceContextProperties.ServicePackageVersion
             };
 
             if(excludePropertyKeys != null)

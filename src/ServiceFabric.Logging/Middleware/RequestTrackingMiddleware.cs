@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Fabric;
 using System.Globalization;
-using System.Runtime.Remoting.Messaging;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -14,23 +13,23 @@ namespace ServiceFabric.Logging.Middleware
 {
     public class RequestTrackingMiddleware
     {
-        private readonly RequestDelegate next;
-        private readonly ILogger logger;
+        private readonly RequestDelegate _next;
+        private readonly ILogger _logger;
 
         public RequestTrackingMiddleware(RequestDelegate next, ILogger logger)
         {
-            this.next = next;
-            this.logger = logger;
+            this._next = next;
+            this._logger = logger;
         }
 
         public async Task Invoke(HttpContext context, StatelessServiceContext serviceContext)
         {
-            using (logger.BeginScope(new Dictionary<string, object>
+            using (_logger.BeginScope(new Dictionary<string, object>
             {
                 [SharedProperties.TraceId] = context.Request.HttpContext.TraceIdentifier
             }))
             {
-                CallContext.LogicalSetData(HeaderIdentifiers.TraceId, context.Request.HttpContext.TraceIdentifier);
+                CallContext.SetData(HeaderIdentifiers.TraceId, context.Request.HttpContext.TraceIdentifier);
 
                 AddTracingDetailsOnRequest(context, serviceContext);
                 
@@ -40,18 +39,18 @@ namespace ServiceFabric.Logging.Middleware
 
                 try
                 {
-                    await next(context);
+                    await _next(context);
                     success = true;
                 }
                 catch (Exception exception)
                 {
-                    logger.LogCritical((int)ServiceFabricEvent.Exception, exception, exception.Message);
+                    _logger.LogCritical((int)ServiceFabricEvent.Exception, exception, exception.Message);
                     throw;
                 }
                 finally
                 {
                     stopwatch.Stop();
-                    logger.LogRequest(context, started, stopwatch.Elapsed, success);
+                    _logger.LogRequest(context, started, stopwatch.Elapsed, success);
                 }
             }
         }

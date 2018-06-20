@@ -17,12 +17,12 @@ namespace WebApi
     /// </summary>
     internal sealed class WebApi : StatelessService
     {
-        private readonly ILogger logger;
+        private readonly ILogger _logger;
 
         public WebApi(StatelessServiceContext context, ILogger logger)
             : base(context)
         {
-            this.logger = logger;
+            _logger = logger;
         }
 
         /// <summary>
@@ -36,19 +36,22 @@ namespace WebApi
                 new ServiceInstanceListener(serviceContext =>
                     new WebListenerCommunicationListener(serviceContext, "ServiceEndpoint", (url, listener) =>
                     {
-                        logger.LogStatelessServiceStartedListening<WebApi>(url);
+                        _logger.LogStatelessServiceStartedListening<WebApi>(url);
 
-                        return new WebHostBuilder().UseWebListener()
-                                    .ConfigureServices(
-                                        services => services
-                                            .AddSingleton(serviceContext)
-                                            .AddSingleton(logger)
-                                            .AddTransient<IServiceRemoting, ServiceRemoting>())
-                                    .UseContentRoot(Directory.GetCurrentDirectory())
-                                    .UseServiceFabricIntegration(listener, ServiceFabricIntegrationOptions.None)
-                                    .UseStartup<Startup>()
-                                    .UseUrls(url)
-                                    .Build();
+                        var webHost = new WebHostBuilder()
+                            .UseKestrel()
+                            .ConfigureServices(
+                                services => services
+                                    .AddSingleton(serviceContext)
+                                    .AddSingleton(_logger)
+                                    .AddTransient<IServiceRemoting, ServiceRemoting>())
+                            .UseContentRoot(Directory.GetCurrentDirectory())
+                            .UseServiceFabricIntegration(listener, ServiceFabricIntegrationOptions.None)
+                            .UseStartup<Startup>()
+                            .UseUrls(url)
+                            .Build();
+
+                        return webHost;
                     }))
             };
         }

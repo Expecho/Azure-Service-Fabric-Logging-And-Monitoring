@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.ServiceFabric.Actors;
 
@@ -23,6 +20,7 @@ namespace MyActor.Interfaces
         /// TODO: Replace with your own actor method.
         /// </summary>
         /// <param name="count"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
         Task SetCountAsync(int count, CancellationToken cancellationToken);
     }

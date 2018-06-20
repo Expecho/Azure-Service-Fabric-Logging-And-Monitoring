@@ -22,7 +22,6 @@ namespace MyActor
         public MyActor(ActorService actorService, ActorId actorId, ILogger logger)
             : base(actorService, actorId, logger)
         {
-            
         }
 
         protected override Task OnActivateAsync()

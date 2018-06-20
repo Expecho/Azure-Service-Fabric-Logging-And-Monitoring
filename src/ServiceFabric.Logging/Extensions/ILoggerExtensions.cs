@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -61,28 +60,20 @@ namespace ServiceFabric.Logging.Extensions
 
         public static void LogRequest(this ILogger logger, HttpContext context, DateTime started, TimeSpan duration, bool success)
         {
-            var headers = new StringBuilder();
-            foreach (string key in context.Request.Headers.Keys)
-            {
-                string value = context.Request.Headers[key];
-                if (!string.IsNullOrEmpty(value))
-                {
-                    headers.AppendLine($"{key}={value}");
-                }
-            }
-
+            var request = context.Request;
             logger.LogInformation(ServiceFabricEvent.ApiRequest,
-                $"The {{{ApiRequestProperties.Method}}} action to {{{ApiRequestProperties.Scheme}}}{{{ApiRequestProperties.Host}}}{{{ApiRequestProperties.Path}}} finished in {{{ApiRequestProperties.DurationInMs}}} ms with status code {{{ApiRequestProperties.StatusCode}}}({{{ApiRequestProperties.Success}}}) ({{{ApiRequestProperties.Response}}}) ({{{ApiRequestProperties.StartTime}}})  Headers: {{{ApiRequestProperties.Headers}}}",
-                context.Request.Method,
-                context.Request.Scheme,
-                context.Request.Host.Value,
-                context.Request.Path.Value,
+                $"The {{{ApiRequestProperties.Method}}} action to {{{ApiRequestProperties.Scheme}}}{{{ApiRequestProperties.Host}}}{{{ApiRequestProperties.Path}}} finished in {{{ApiRequestProperties.DurationInMs}}} ms with status code {{{ApiRequestProperties.StatusCode}}}({{{ApiRequestProperties.Success}}}) Headers: {{{ApiRequestProperties.Headers}}} Body: {{{ApiRequestProperties.Body}}} ({{{ApiRequestProperties.Response}}}) ({{{ApiRequestProperties.StartTime}}})",
+                request.Method,
+                request.Scheme,
+                request.Host.Value,
+                request.Path.Value,
                 duration.TotalMilliseconds,
                 context.Response.StatusCode,
                 success,
+                request.ReadHeadersAsString(),
+                request.ReadRequestBodyAsString(),
                 context.Response,
-                started,
-                headers);
+                started);
         }
 
         public static void LogActorMethod<TActor>(this ILogger logger, ActorMethodContext context, DateTime started, TimeSpan duration) where TActor : Actor
@@ -93,8 +84,7 @@ namespace ServiceFabric.Logging.Extensions
                 typeof(TActor).FullName,
                 context.MethodName,
                 duration.TotalMilliseconds,
-                started
-                );
+                started);
         }
 
         public static void LogStatelessServiceStartedListening<T>(this ILogger logger, string endpoint) where T : StatelessService

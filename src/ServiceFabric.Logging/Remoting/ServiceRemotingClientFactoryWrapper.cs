@@ -5,8 +5,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.ServiceFabric.Services.Client;
 using Microsoft.ServiceFabric.Services.Communication.Client;
-using Microsoft.ServiceFabric.Services.Remoting;
-using Microsoft.ServiceFabric.Services.Remoting.Client;
+using Microsoft.ServiceFabric.Services.Remoting.V2;
+using Microsoft.ServiceFabric.Services.Remoting.V2.Client;
 
 namespace ServiceFabric.Logging.Remoting
 {
@@ -15,107 +15,109 @@ namespace ServiceFabric.Logging.Remoting
         public event EventHandler<CommunicationClientEventArgs<IServiceRemotingClient>> ClientConnected;
         public event EventHandler<CommunicationClientEventArgs<IServiceRemotingClient>> ClientDisconnected;
 
-        private readonly string traceId;
-        private readonly IServiceRemotingClientFactory serviceRemotingClientFactory;
+        private readonly string _traceId;
+        private readonly IServiceRemotingClientFactory _serviceRemotingClientFactory;
 
         public ServiceRemotingClientFactoryWrapper(string traceId, IServiceRemotingClientFactory serviceRemotingClientFactory)
         {
-            this.traceId = traceId;
-            this.serviceRemotingClientFactory = serviceRemotingClientFactory;
+            _traceId = traceId;
+            _serviceRemotingClientFactory = serviceRemotingClientFactory;
         }
 
-        public async Task<IServiceRemotingClient> GetClientAsync(ResolvedServicePartition previousRsp,
+        public async Task<IServiceRemotingClient> GetClientAsync(
+            ResolvedServicePartition previousRsp,
             TargetReplicaSelector targetReplicaSelector,
             string listenerName,
             OperationRetrySettings retrySettings,
             CancellationToken cancellationToken)
         {
-            var client = await serviceRemotingClientFactory.GetClientAsync(previousRsp, targetReplicaSelector, listenerName, retrySettings, cancellationToken);
-            return new ServiceRemotingClientWrapper(client, traceId);
+            var client = await _serviceRemotingClientFactory.GetClientAsync(
+                previousRsp,
+                targetReplicaSelector,
+                listenerName,
+                retrySettings,
+                cancellationToken);
+            return new ServiceRemotingClientWrapper(client, _traceId);
         }
 
-        public async Task<IServiceRemotingClient> GetClientAsync(Uri serviceUri,
+        public async Task<IServiceRemotingClient> GetClientAsync(
+            Uri serviceUri,
             ServicePartitionKey partitionKey,
             TargetReplicaSelector targetReplicaSelector,
             string listenerName,
             OperationRetrySettings retrySettings,
             CancellationToken cancellationToken)
         {
-            var client = await serviceRemotingClientFactory.GetClientAsync(serviceUri, partitionKey, targetReplicaSelector, listenerName, retrySettings, cancellationToken);
-            return new ServiceRemotingClientWrapper(client, traceId);
+            var client = await _serviceRemotingClientFactory.GetClientAsync(
+                serviceUri,
+                partitionKey,
+                targetReplicaSelector,
+                listenerName,
+                retrySettings,
+                cancellationToken);
+            return new ServiceRemotingClientWrapper(client, _traceId);
         }
 
-        public Task<OperationRetryControl> ReportOperationExceptionAsync(IServiceRemotingClient client,
+        public Task<OperationRetryControl> ReportOperationExceptionAsync(
+            IServiceRemotingClient client,
             ExceptionInformation exceptionInformation,
             OperationRetrySettings retrySettings,
             CancellationToken cancellationToken)
         {
-            return serviceRemotingClientFactory.ReportOperationExceptionAsync(((ServiceRemotingClientWrapper)client).Client, exceptionInformation, retrySettings, cancellationToken);
+            return _serviceRemotingClientFactory.ReportOperationExceptionAsync(
+                ((ServiceRemotingClientWrapper)client).Client,
+                exceptionInformation,
+                retrySettings,
+                cancellationToken);
+        }
+
+        public IServiceRemotingMessageBodyFactory GetRemotingMessageBodyFactory()
+        {
+            return _serviceRemotingClientFactory.GetRemotingMessageBodyFactory();
         }
 
         private class ServiceRemotingClientWrapper : IServiceRemotingClient
         {
-            private readonly string traceId;
+            private readonly string _traceId;
 
             public ServiceRemotingClientWrapper(IServiceRemotingClient client, string traceId)
             {
-                this.Client = client;
-                this.traceId = traceId;
+                Client = client;
+                _traceId = traceId;
             }
 
             internal IServiceRemotingClient Client { get; }
 
             public ResolvedServiceEndpoint Endpoint
             {
-                get
-                {
-                    return Client.Endpoint;
-                }
-
-                set
-                {
-                    Client.Endpoint = value;
-                }
+                get => Client.Endpoint;
+                set => Client.Endpoint = value;
             }
 
             public string ListenerName
             {
-                get
-                {
-                    return Client.ListenerName;
-                }
-
-                set
-                {
-                    Client.ListenerName = value;
-                }
+                get => Client.ListenerName;
+                set => Client.ListenerName = value;
             }
 
             public ResolvedServicePartition ResolvedServicePartition
             {
-                get
-                {
-                    return Client.ResolvedServicePartition;
-                }
-
-                set
-                {
-                    Client.ResolvedServicePartition = value;
-                }
+                get => Client.ResolvedServicePartition;
+                set => Client.ResolvedServicePartition = value;
             }
 
-            public Task<byte[]> RequestResponseAsync(ServiceRemotingMessageHeaders messageHeaders, byte[] requestBody)
+            public Task<IServiceRemotingResponseMessage> RequestResponseAsync(IServiceRemotingRequestMessage requestRequestMessage)
             {
-                messageHeaders.AddHeader(HeaderIdentifiers.TraceId, Encoding.ASCII.GetBytes(traceId));
-
-                return Client.RequestResponseAsync(messageHeaders, requestBody);
+                byte[] headerValue = Encoding.ASCII.GetBytes(_traceId);
+                requestRequestMessage.GetHeader().AddHeader(HeaderIdentifiers.TraceId, headerValue);
+                return Client.RequestResponseAsync(requestRequestMessage);
             }
 
-            public void SendOneWay(ServiceRemotingMessageHeaders messageHeaders, byte[] requestBody)
+            public void SendOneWay(IServiceRemotingRequestMessage requestMessage)
             {
-                messageHeaders.AddHeader(HeaderIdentifiers.TraceId, Encoding.ASCII.GetBytes(traceId));
-
-                Client.SendOneWay(messageHeaders, requestBody);
+                byte[] headerValue = Encoding.ASCII.GetBytes(_traceId);
+                requestMessage.GetHeader().AddHeader(HeaderIdentifiers.TraceId, headerValue);
+                Client.SendOneWay(requestMessage);
             }
         }
     }

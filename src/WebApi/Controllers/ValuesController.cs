@@ -16,11 +16,11 @@ namespace WebApi.Controllers
     [Route("api/[controller]")]
     public class ValuesController : Controller
     {
-        private readonly IServiceRemoting serviceRemoting;
+        private readonly IServiceRemoting _serviceRemoting;
 
         public ValuesController(ILogger logger, IServiceRemoting serviceRemoting)
         {
-            this.serviceRemoting = serviceRemoting;
+            this._serviceRemoting = serviceRemoting;
         }
 
         // GET api/values?a=1&b=2
@@ -28,7 +28,7 @@ namespace WebApi.Controllers
         public async Task<int> Get(int a, int b)
         {
             var uri = new Uri($"{FabricRuntime.GetActivationContext().ApplicationName}/MyStateless");
-            var sum = await serviceRemoting.CallAsync<IMyService, int>(HttpContext.TraceIdentifier, uri, service => service.CalculateSum(a, b));
+            var sum = await _serviceRemoting.CallAsync<IMyService, int>(HttpContext.TraceIdentifier, uri, service => service.CalculateSumAsync(a, b));
 
             await new HttpClient().GetAsync("http://www.google.nl");
 
@@ -36,6 +36,12 @@ namespace WebApi.Controllers
             await actor.GetCountAsync(CancellationToken.None);
 
             return sum;
+        }
+
+        [HttpPost]
+        public IActionResult Post([FromBody] string data)
+        {
+            return new StatusCodeResult(201);
         }
     }
 }
