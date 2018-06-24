@@ -28,7 +28,7 @@ This source is build and tested using Azure Service Fabric 5.5 and SDK 2.5, with
 
 Before running the sample [create a new Application Insights resource](https://docs.microsoft.com/en-us/azure/application-insights/app-insights-create-new-resource) and copy the Instrumentation Key to the application parameter in the [Service Fabric Application manifest file](/src/AzureServiceFabric.Demo.Diagnostics/ApplicationPackageRoot/ApplicationManifest.xml#L6):
 
-```
+```xml
 <ApplicationManifest xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ApplicationTypeName="AzureServiceFabric.Demo.DiagnosticsType" ApplicationTypeVersion="1.0.0" xmlns="http://schemas.microsoft.com/2011/01/fabric">
   <Parameters>
     <Parameter Name="WebApi_InstanceCount" DefaultValue="-1" />
