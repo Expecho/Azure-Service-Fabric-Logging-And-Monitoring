@@ -24,7 +24,7 @@ Most other logging frameworks provide Application Insights sinks that are only c
  
 # Getting started
 
-This source is build and tested using Azure Service Fabric 5.5 and SDK 2.5, with Visual Studio 2017 v15.1
+This source is build and tested using Azure Service Fabric 6.2 and SDK 3.1, with Visual Studio 2017 v15.1
 
 Before running the sample [create a new Application Insights resource](https://docs.microsoft.com/en-us/azure/application-insights/app-insights-create-new-resource) and copy the Instrumentation Key to the application parameter in the [Service Fabric Application manifest file](/src/AzureServiceFabric.Demo.Diagnostics/ApplicationPackageRoot/ApplicationManifest.xml#L6):
 
