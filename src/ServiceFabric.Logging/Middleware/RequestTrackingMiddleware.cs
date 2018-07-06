@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Fabric;
@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using ServiceFabric.Logging.Extensions;
 using ServiceFabric.Logging.PropertyMap;
+using ServiceFabric.Remoting.CustomHeaders;
 
 namespace ServiceFabric.Logging.Middleware
 {
@@ -29,7 +30,7 @@ namespace ServiceFabric.Logging.Middleware
                 [SharedProperties.TraceId] = context.Request.HttpContext.TraceIdentifier
             }))
             {
-                CallContext.SetData(HeaderIdentifiers.TraceId, context.Request.HttpContext.TraceIdentifier);
+                RemotingContext.SetData(HeaderIdentifiers.TraceId, context.Request.HttpContext.TraceIdentifier);
 
                 AddTracingDetailsOnRequest(context, serviceContext);
                 

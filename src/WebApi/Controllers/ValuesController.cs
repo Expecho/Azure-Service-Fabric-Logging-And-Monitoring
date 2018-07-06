@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ServiceInterfaces;
 using System;
@@ -9,7 +9,9 @@ using System.Threading.Tasks;
 using Microsoft.ServiceFabric.Actors;
 using Microsoft.ServiceFabric.Actors.Client;
 using MyActor.Interfaces;
+using ServiceFabric.Logging;
 using ServiceFabric.Logging.Remoting;
+using ServiceFabric.Remoting.CustomHeaders;
 
 namespace WebApi.Controllers
 {
@@ -28,7 +30,13 @@ namespace WebApi.Controllers
         public async Task<int> Get(int a, int b)
         {
             var uri = new Uri($"{FabricRuntime.GetActivationContext().ApplicationName}/MyStateless");
-            var sum = await _serviceRemoting.CallAsync<IMyService, int>(HttpContext.TraceIdentifier, uri, service => service.CalculateSumAsync(a, b));
+
+            Func<CustomHeaders> customHeadersProvider = () => new CustomHeaders
+            {
+                { HeaderIdentifiers.TraceId, HttpContext.TraceIdentifier }
+            };
+
+            var sum = await _serviceRemoting.CallAsync<IMyService, int>(customHeadersProvider, uri, service => service.CalculateSumAsync(a, b));
 
             await new HttpClient().GetAsync("http://www.google.nl");
 
