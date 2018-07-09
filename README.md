@@ -8,6 +8,17 @@ The application consist of two stateless services, one hosting an ASP.Net Core a
 
 It uses a structured logging framework called [Serilog](https://serilog.net/) to log events. The logged events are then written to [Application Insights](https://azure.microsoft.com/en-us/services/application-insights/) using [this](https://github.com/serilog/serilog-sinks-applicationinsights) Serilog sink. By using Serilog to capture the events instead of logging directly to Application Insights using the SDK it is easy to add different outputs for the logged events.
 
+Also this repository contains the NuGet package [ServiceFabric.Logging](https://www.nuget.org/packages/ServiceFabric.Logging/).
+
+You can directly install this library from [Nuget][6]    
+
+    PM> Install-Package ServiceFabric.Logging
+    
+  [![NuGet package](https://badge.fury.io/nu/ServiceFabric.Logging.svg)](https://www.nuget.org/packages/ServiceFabric.Logging/)
+ [![NuGet](https://img.shields.io/nuget/dt/ServiceFabric.Logging.svg)]()
+
+[6]: http://nuget.org
+
 # How it works
 
 .Net Core provides [a logging abstraction](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/logging) that provides support for structured logging. Since Serilog is supported by the .Net Core logging abstraction we can seperate the calls to the logger from the actual implementation. (For more background about this, read [this excellent blog post](https://msdn.microsoft.com/en-us/magazine/mt694089.aspx))
