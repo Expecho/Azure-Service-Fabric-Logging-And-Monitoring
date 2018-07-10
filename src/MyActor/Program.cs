@@ -1,10 +1,11 @@
-﻿using System;
+using System;
 using System.Threading;
 using Microsoft.Extensions.Logging;
 using Microsoft.ServiceFabric.Actors.Runtime;
 using ServiceFabric.Logging;
 using ServiceFabric.Logging.Extensions;
 using System.Fabric;
+using ServiceFabric.Remoting.CustomHeaders.Actors;
 
 namespace MyActor
 {
@@ -36,7 +37,7 @@ namespace MyActor
                         var loggerFactory = new LoggerFactoryBuilder(context).CreateLoggerFactory(applicationInsightsKey);
                         logger = loggerFactory.CreateLogger<MyActor>();
 
-                        return new ActorService(context, actorType, (service, id) => new MyActor(service, id, logger));
+                        return new ExtendedActorService(context, actorType, (service, id) => new MyActor(service, id, logger));
                     }).GetAwaiter().GetResult();
 
                 Thread.Sleep(Timeout.Infinite);

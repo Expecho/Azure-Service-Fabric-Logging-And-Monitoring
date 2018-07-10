@@ -1,4 +1,4 @@
-﻿using System.Fabric;
+using System.Fabric;
 using System.Globalization;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Extensions.Logging;
@@ -7,6 +7,7 @@ using Serilog.Context;
 using Serilog.Events;
 using ServiceFabric.Logging.ApplicationInsights;
 using ServiceFabric.Logging.PropertyMap;
+using ServiceFabric.Remoting.CustomHeaders;
 
 namespace ServiceFabric.Logging
 {
@@ -27,7 +28,7 @@ namespace ServiceFabric.Logging
             };
 
             configuration.TelemetryInitializers.Add(new OperationContextTelemetryInitializer(() =>
-                CallContext.GetData(HeaderIdentifiers.TraceId)?.ToString()));
+                RemotingContext.GetData(HeaderIdentifiers.TraceId)?.ToString()));
 
             new LiveStreamProvider(configuration).Enable();
             

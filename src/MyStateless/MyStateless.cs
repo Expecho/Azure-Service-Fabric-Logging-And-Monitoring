@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging;
 using Microsoft.ServiceFabric.Services.Communication.Runtime;
 using Microsoft.ServiceFabric.Services.Runtime;
 using ServiceInterfaces;
@@ -8,7 +8,8 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.ServiceFabric.Services.Remoting.V2.FabricTransport.Runtime;
 using ServiceFabric.Logging;
-using ServiceFabric.Logging.Remoting;
+using ServiceFabric.Remoting.CustomHeaders;
+using ServiceFabric.Remoting.CustomHeaders.ReliableServices;
 
 namespace MyStateless
 {
@@ -35,13 +36,13 @@ namespace MyStateless
             {
                 new ServiceInstanceListener(context =>
                     new FabricTransportServiceRemotingListener(context,
-                        new TracingEnabledRemotingServiceDispatcher(context, this)))
+                        new ExtendedServiceRemotingMessageDispatcher(context, this)))
             };
         }
 
         public async Task<int> CalculateSumAsync(int a, int b)
         {
-            var traceId = CallContext.GetData(HeaderIdentifiers.TraceId);
+            var traceId = RemotingContext.GetData(HeaderIdentifiers.TraceId);
 
             _logger.LogTrace($"Hello from inside {nameof(MyStateless)} (traceId {traceId})");
 

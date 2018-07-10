@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -7,6 +7,7 @@ using Microsoft.ServiceFabric.Services.Remoting;
 using Microsoft.ServiceFabric.Services.Remoting.Client;
 using Microsoft.ServiceFabric.Services.Remoting.V2.FabricTransport.Client;
 using ServiceFabric.Logging.Extensions;
+using ServiceFabric.Remoting.CustomHeaders;
 
 namespace ServiceFabric.Logging.Remoting
 {
@@ -20,12 +21,11 @@ namespace ServiceFabric.Logging.Remoting
         }
 
         public async Task<TResult> CallAsync<TService, TResult>(
-            string traceId,
+            CustomHeaders customHeaders,
             Uri uri,
             Expression<Func<TService, Task<TResult>>> callMethod) where TService : IService
         {
-            var proxyFactory = new ServiceProxyFactory(c => new ServiceRemotingClientFactoryWrapper(traceId, new FabricTransportServiceRemotingClientFactory(remotingCallbackMessageHandler: c)));
-
+            var proxyFactory = new ServiceProxyFactory(c => new ExtendedServiceRemotingClientFactory(new FabricTransportServiceRemotingClientFactory(remotingCallbackMessageHandler: c), customHeaders));
             var service = proxyFactory.CreateServiceProxy<TService>(uri);
             var success = true;
 
@@ -50,12 +50,11 @@ namespace ServiceFabric.Logging.Remoting
         }
 
         public async Task CallAsync<TService>(
-            string traceId,
+            CustomHeaders customHeaders,
             Uri uri,
             Expression<Func<TService, Task>> callMethod) where TService : IService
         {
-            var proxyFactory = new ServiceProxyFactory(c => new ServiceRemotingClientFactoryWrapper(traceId, new FabricTransportServiceRemotingClientFactory(remotingCallbackMessageHandler: c)));
-
+            var proxyFactory = new ServiceProxyFactory(c => new ExtendedServiceRemotingClientFactory(new FabricTransportServiceRemotingClientFactory(remotingCallbackMessageHandler: c), customHeaders));
             var service = proxyFactory.CreateServiceProxy<TService>(uri);
             var success = true;
 
