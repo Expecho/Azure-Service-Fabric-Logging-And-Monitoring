@@ -31,12 +31,12 @@ namespace WebApi.Controllers
         {
             var uri = new Uri($"{FabricRuntime.GetActivationContext().ApplicationName}/MyStateless");
 
-            Func<CustomHeaders> customHeadersProvider = () => new CustomHeaders
+            var customheaders = new CustomHeaders
             {
                 { HeaderIdentifiers.TraceId, HttpContext.TraceIdentifier }
             };
 
-            var sum = await _serviceRemoting.CallAsync<IMyService, int>(customHeadersProvider, uri, service => service.CalculateSumAsync(a, b));
+            var sum = await _serviceRemoting.CallAsync<IMyService, int>(customheaders, uri, service => service.CalculateSumAsync(a, b));
 
             await new HttpClient().GetAsync("http://www.google.nl");
 

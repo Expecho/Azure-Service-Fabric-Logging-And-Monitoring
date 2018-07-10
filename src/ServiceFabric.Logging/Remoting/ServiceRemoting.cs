@@ -21,11 +21,11 @@ namespace ServiceFabric.Logging.Remoting
         }
 
         public async Task<TResult> CallAsync<TService, TResult>(
-            Func<CustomHeaders> customHeadersProvider,
+            CustomHeaders customHeaders,
             Uri uri,
             Expression<Func<TService, Task<TResult>>> callMethod) where TService : IService
         {
-            var proxyFactory = new ServiceProxyFactory(c => new ExtendedServiceRemotingClientFactory(new FabricTransportServiceRemotingClientFactory(remotingCallbackMessageHandler: c), customHeadersProvider));
+            var proxyFactory = new ServiceProxyFactory(c => new ExtendedServiceRemotingClientFactory(new FabricTransportServiceRemotingClientFactory(remotingCallbackMessageHandler: c), customHeaders));
             var service = proxyFactory.CreateServiceProxy<TService>(uri);
             var success = true;
 
@@ -50,11 +50,11 @@ namespace ServiceFabric.Logging.Remoting
         }
 
         public async Task CallAsync<TService>(
-            Func<CustomHeaders> customHeadersProvider,
+            CustomHeaders customHeaders,
             Uri uri,
             Expression<Func<TService, Task>> callMethod) where TService : IService
         {
-            var proxyFactory = new ServiceProxyFactory(c => new ExtendedServiceRemotingClientFactory(new FabricTransportServiceRemotingClientFactory(remotingCallbackMessageHandler: c), customHeadersProvider));
+            var proxyFactory = new ServiceProxyFactory(c => new ExtendedServiceRemotingClientFactory(new FabricTransportServiceRemotingClientFactory(remotingCallbackMessageHandler: c), customHeaders));
             var service = proxyFactory.CreateServiceProxy<TService>(uri);
             var success = true;
 
