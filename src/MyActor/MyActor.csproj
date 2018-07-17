@@ -13,10 +13,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.ServiceFabric.Actors" Version="3.1.301" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\MyActor.Interfaces\MyActor.Interfaces.csproj" />
     <ProjectReference Include="..\ServiceFabric.Logging\ServiceFabric.Logging.csproj" />
   </ItemGroup>

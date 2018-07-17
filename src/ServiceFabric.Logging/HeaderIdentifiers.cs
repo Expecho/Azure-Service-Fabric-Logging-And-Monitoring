@@ -1,4 +1,4 @@
-﻿namespace ServiceFabric.Logging
+namespace ServiceFabric.Logging
 {
     public class HeaderIdentifiers
     {
