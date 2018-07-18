@@ -15,10 +15,7 @@
     <PackageReference Include="Microsoft.AspNetCore" Version="2.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.1.1" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="2.1.1" />
-    <PackageReference Include="Microsoft.ServiceFabric" Version="6.2.301" />
-    <PackageReference Include="Microsoft.ServiceFabric.AspNetCore.WebListener" Version="3.1.301" />
-    <PackageReference Include="Microsoft.ServiceFabric.Data" Version="3.1.301" />
-    <PackageReference Include="Microsoft.ServiceFabric.Services" Version="3.1.301" />
+    <PackageReference Include="Microsoft.ServiceFabric.AspNetCore.WebListener" Version="3.2.162" />
   </ItemGroup>
 
   <ItemGroup>

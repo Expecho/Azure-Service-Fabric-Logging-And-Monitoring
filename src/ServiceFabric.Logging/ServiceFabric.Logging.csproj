@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project Sdk="Microsoft.NET.Sdk" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -13,9 +13,7 @@
     <Product>ServiceFabric.Logging</Product>
     <AssemblyName>ServiceFabric.Logging</AssemblyName>
     <RootNamespace>ServiceFabric.Logging</RootNamespace>
-    <Version>2.0.0</Version>
-    <AssemblyVersion>2.0.0.0</AssemblyVersion>
-    <FileVersion>2.0.0.0</FileVersion>
+    <Version>2.0.1</Version>
     <NoWarn>CS0067</NoWarn>
   </PropertyGroup>
 
@@ -24,14 +22,14 @@
     <PackageReference Include="Microsoft.ApplicationInsights.PerfCounterCollector" Version="2.6.4" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.1.1" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="2.1.1" />
-    <PackageReference Include="Microsoft.ServiceFabric" Version="6.2.301" />
-    <PackageReference Include="Microsoft.ServiceFabric.Actors" Version="3.1.301" />
-    <PackageReference Include="Microsoft.ServiceFabric.Services.Remoting" Version="3.1.301" />
+    <PackageReference Include="Microsoft.ServiceFabric" Version="6.3.162" />
+    <PackageReference Include="Microsoft.ServiceFabric.Actors" Version="3.2.162" />
+    <PackageReference Include="Microsoft.ServiceFabric.Services.Remoting" Version="3.2.162" />
     <PackageReference Include="Serilog.Extensions.Logging" Version="2.0.2" />
     <PackageReference Include="Serilog.Sinks.ApplicationInsights" Version="2.6.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
     <PackageReference Include="Serilog.Sinks.Trace" Version="2.1.0" />
-    <PackageReference Include="ServiceFabric.Remoting.CustomHeaders" Version="2.0.4" />
+    <PackageReference Include="ServiceFabric.Remoting.CustomHeaders" Version="3.0.5" />
   </ItemGroup>
 
 </Project>

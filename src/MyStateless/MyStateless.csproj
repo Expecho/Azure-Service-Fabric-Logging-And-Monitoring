@@ -8,10 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.ServiceFabric" Version="6.2.301" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\ServiceFabric.Logging\ServiceFabric.Logging.csproj" />
     <ProjectReference Include="..\ServiceInterfaces\ServiceInterfaces.csproj" />
   </ItemGroup>
