@@ -1,14 +1,17 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Fabric;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.ServiceFabric.Services.Communication.AspNetCore;
 using Microsoft.ServiceFabric.Services.Communication.Runtime;
 using Microsoft.ServiceFabric.Services.Runtime;
+using ServiceFabric.Logging;
 using ServiceFabric.Logging.Extensions;
 using ServiceFabric.Logging.Remoting;
+using ServiceFabric.Remoting.CustomHeaders;
 
 namespace WebApi
 {
@@ -42,9 +45,10 @@ namespace WebApi
                             .UseKestrel()
                             .ConfigureServices(
                                 services => services
+                                    .AddHttpContextAccessor()
                                     .AddSingleton(serviceContext)
                                     .AddSingleton(_logger)
-                                    .AddTransient<IServiceRemoting, ServiceRemoting>())
+                                    .AddTransient<IProxyFactoryProvider, ProxyFactoryProvider>())
                             .UseContentRoot(Directory.GetCurrentDirectory())
                             .UseServiceFabricIntegration(listener, ServiceFabricIntegrationOptions.None)
                             .UseStartup<Startup>()

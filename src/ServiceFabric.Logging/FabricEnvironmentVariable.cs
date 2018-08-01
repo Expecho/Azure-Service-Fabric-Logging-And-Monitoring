@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 
 namespace ServiceFabric.Logging
 {
-    public static class FabricEnvironmentVariable
+    internal static class FabricEnvironmentVariable
     {
         public static string ApplicationName => Environment.GetEnvironmentVariable("Fabric_ApplicationName");
         public static string ServicePackageName => Environment.GetEnvironmentVariable("Fabric_ServicePackageName");

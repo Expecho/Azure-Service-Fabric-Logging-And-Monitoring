@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <PackageId>ServiceFabric.Logging</PackageId>
-    <PackageVersion>2.0.0</PackageVersion>
+    <PackageVersion>2.0.2</PackageVersion>
     <Authors>De Heer Software</Authors>
     <Description>Provides logging and tracking for Azure Service Fabric services</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
@@ -13,8 +13,12 @@
     <Product>ServiceFabric.Logging</Product>
     <AssemblyName>ServiceFabric.Logging</AssemblyName>
     <RootNamespace>ServiceFabric.Logging</RootNamespace>
-    <Version>2.0.1</Version>
+    <Version>2.0.2</Version>
     <NoWarn>CS0067</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>bin\Debug\netstandard2.0\ServiceFabric.Logging.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -29,7 +33,7 @@
     <PackageReference Include="Serilog.Sinks.ApplicationInsights" Version="2.6.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
     <PackageReference Include="Serilog.Sinks.Trace" Version="2.1.0" />
-    <PackageReference Include="ServiceFabric.Remoting.CustomHeaders" Version="3.0.5" />
+    <PackageReference Include="ServiceFabric.Remoting.CustomHeaders" Version="3.0.8" />
   </ItemGroup>
 
 </Project>

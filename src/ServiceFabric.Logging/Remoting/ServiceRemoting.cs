@@ -11,15 +11,24 @@ using ServiceFabric.Remoting.CustomHeaders;
 
 namespace ServiceFabric.Logging.Remoting
 {
+    /// <summary>
+    /// Helper class for remoting calls
+    /// </summary>
+    [Obsolete("Use the ProxyFactoryProvider class")]
     public class ServiceRemoting : IServiceRemoting
     {
         private readonly ILogger _logger;
 
+        /// <summary>
+        /// Creates a new instance
+        /// </summary>
+        /// <param name="logger">An <see cref="ILogger"/> instance used to log a service call</param>
         public ServiceRemoting(ILogger logger)
         {
             _logger = logger;
         }
 
+        /// <inheritdoc/>
         public async Task<TResult> CallAsync<TService, TResult>(
             CustomHeaders customHeaders,
             Uri uri,
@@ -49,6 +58,7 @@ namespace ServiceFabric.Logging.Remoting
             }
         }
 
+        /// <inheritdoc/>
         public async Task CallAsync<TService>(
             CustomHeaders customHeaders,
             Uri uri,

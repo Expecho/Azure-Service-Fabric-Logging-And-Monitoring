@@ -1,9 +1,9 @@
-﻿using Microsoft.ApplicationInsights.DataContracts;
+using Microsoft.ApplicationInsights.DataContracts;
 using Serilog.Events;
 
 namespace ServiceFabric.Logging
 {
-    public static class LogEventLevelExtensions
+    internal static class LogEventLevelExtensions
     {
         public static SeverityLevel? ToSeverityLevel(this LogEventLevel logEventLevel)
         {

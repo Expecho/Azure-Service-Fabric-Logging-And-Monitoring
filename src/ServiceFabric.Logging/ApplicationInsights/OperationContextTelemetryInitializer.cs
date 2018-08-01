@@ -4,7 +4,7 @@ using Microsoft.ApplicationInsights.Extensibility;
 
 namespace ServiceFabric.Logging.ApplicationInsights
 {
-    public class OperationContextTelemetryInitializer : ITelemetryInitializer
+    internal class OperationContextTelemetryInitializer : ITelemetryInitializer
     {
         private readonly Func<string> operationIdProvider;
 
