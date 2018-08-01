@@ -1,6 +1,6 @@
-﻿namespace ServiceFabric.Logging
+namespace ServiceFabric.Logging
 {
-    public static class ServiceFabricEvent
+    internal static class ServiceFabricEvent
     {
         public const int Undefined = 0;
         public const int Trace = 1000;

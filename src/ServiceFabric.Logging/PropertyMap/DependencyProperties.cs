@@ -1,6 +1,6 @@
-﻿namespace ServiceFabric.Logging.PropertyMap
+namespace ServiceFabric.Logging.PropertyMap
 {
-    public static class DependencyProperties
+    internal static class DependencyProperties
     {
         public const string Name = "Name";
         public const string DurationInMs = "DurationInMs";

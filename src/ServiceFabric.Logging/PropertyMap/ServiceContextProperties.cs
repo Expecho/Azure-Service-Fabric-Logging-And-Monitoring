@@ -1,6 +1,6 @@
-﻿namespace ServiceFabric.Logging.PropertyMap
+namespace ServiceFabric.Logging.PropertyMap
 {
-    public static class ServiceContextProperties
+    internal static class ServiceContextProperties
     {
         public const string ServiceName = "ServiceFabric.ServiceName";
         public const string ServiceTypeName = "ServiceFabric.ServiceTypeName";

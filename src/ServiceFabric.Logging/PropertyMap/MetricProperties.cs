@@ -1,6 +1,6 @@
-﻿namespace ServiceFabric.Logging.PropertyMap
+namespace ServiceFabric.Logging.PropertyMap
 {
-    public static class MetricProperties
+    internal static class MetricProperties
     {
         public const string Name = "Name";
         public const string Value = "Value";

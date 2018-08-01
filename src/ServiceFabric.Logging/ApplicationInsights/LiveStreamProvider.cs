@@ -1,10 +1,10 @@
-﻿using Microsoft.ApplicationInsights.DependencyCollector;
+using Microsoft.ApplicationInsights.DependencyCollector;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.ApplicationInsights.Extensibility.PerfCounterCollector.QuickPulse;
 
 namespace ServiceFabric.Logging.ApplicationInsights
 {
-    public class LiveStreamProvider
+    internal class LiveStreamProvider
     {
         private readonly TelemetryConfiguration configuration;
 

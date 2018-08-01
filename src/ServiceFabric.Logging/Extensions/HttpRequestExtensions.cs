@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Text;
 using Microsoft.AspNetCore.Http;
 
 namespace ServiceFabric.Logging.Extensions
 {
-    public static class HttpRequestExtensions
+    internal static class HttpRequestExtensions
     {
         public static string ReadRequestBodyAsString(this HttpRequest request)
         {

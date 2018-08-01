@@ -1,6 +1,6 @@
-﻿namespace ServiceFabric.Logging.PropertyMap
+namespace ServiceFabric.Logging.PropertyMap
 {
-    public static class ApiRequestProperties
+    internal static class ApiRequestProperties
     {
         public const string Scheme = "Scheme";
         public const string Method = "Method";
