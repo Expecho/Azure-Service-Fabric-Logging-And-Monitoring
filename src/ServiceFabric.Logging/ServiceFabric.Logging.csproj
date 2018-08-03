@@ -4,17 +4,20 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <PackageId>ServiceFabric.Logging</PackageId>
     <PackageVersion>2.0.2</PackageVersion>
-    <Authors>De Heer Software</Authors>
+    <Authors>Peter Bons</Authors>
     <Description>Provides logging and tracking for Azure Service Fabric services</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageReleaseNotes>Provides logging and tracking for Azure Service Fabric services</PackageReleaseNotes>
-    <Copyright>Copyright 2018 (c) De Heer Software. All rights reserved.</Copyright>
+    <Copyright>Copyright 2018 (c) Peter Bons. All rights reserved.</Copyright>
     <PackageTags>logger logging logs servicefabric azure</PackageTags>
     <Product>ServiceFabric.Logging</Product>
     <AssemblyName>ServiceFabric.Logging</AssemblyName>
     <RootNamespace>ServiceFabric.Logging</RootNamespace>
     <Version>2.0.2</Version>
     <NoWarn>CS0067</NoWarn>
+    <Company>Peter Bons</Company>
+    <PackageProjectUrl>https://github.com/Expecho/Azure-Service-Fabric-Logging-And-Monitoring</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Expecho/Azure-Service-Fabric-Logging-And-Monitoring</RepositoryUrl>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
