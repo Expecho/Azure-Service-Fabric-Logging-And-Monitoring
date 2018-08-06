@@ -3,6 +3,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Microsoft.ServiceFabric.Actors;
 using Microsoft.ServiceFabric.Actors.Runtime;
 using Microsoft.ServiceFabric.Services.Remoting;
 using Microsoft.ServiceFabric.Services.Runtime;
@@ -65,6 +66,20 @@ namespace ServiceFabric.Logging.Extensions
                 $"The call to {{{DependencyProperties.Type}}} dependency {{{DependencyProperties.DependencyTypeName}}} named {{{DependencyProperties.Name}}} finished in {{{DependencyProperties.DurationInMs}}} ms (success: {{{DependencyProperties.Success}}}) ({{{DependencyProperties.StartTime}}})",
                 "ServiceFabric",
                 service,
+                method,
+                duration.TotalMilliseconds,
+                success,
+                started);
+        }
+
+        public static void LogDependency(this ILogger logger, string service, string method,
+            DateTime started, TimeSpan duration, bool success, ActorId actorId)
+        {
+            logger.LogInformation(ServiceFabricEvent.ServiceRequest,
+                $"The call to {{{DependencyProperties.Type}}} actor {{{DependencyProperties.DependencyTypeName}}} with id {{{DependencyProperties.Id}}} named {{{DependencyProperties.Name}}} finished in {{{DependencyProperties.DurationInMs}}} ms (success: {{{DependencyProperties.Success}}}) ({{{DependencyProperties.StartTime}}})",
+                "ServiceFabric",
+                service,
+                actorId.ToString(),
                 method,
                 duration.TotalMilliseconds,
                 success,

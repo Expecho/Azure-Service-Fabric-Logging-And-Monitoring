@@ -13,11 +13,12 @@
     <Product>ServiceFabric.Logging</Product>
     <AssemblyName>ServiceFabric.Logging</AssemblyName>
     <RootNamespace>ServiceFabric.Logging</RootNamespace>
-    <Version>2.0.2</Version>
+    <Version>2.0.3</Version>
     <NoWarn>CS0067</NoWarn>
     <Company>Peter Bons</Company>
     <PackageProjectUrl>https://github.com/Expecho/Azure-Service-Fabric-Logging-And-Monitoring</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Expecho/Azure-Service-Fabric-Logging-And-Monitoring</RepositoryUrl>
+    <PackageLicenseUrl>https://opensource.org/licenses/MIT</PackageLicenseUrl>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

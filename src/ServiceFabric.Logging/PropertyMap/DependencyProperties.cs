@@ -9,5 +9,6 @@ namespace ServiceFabric.Logging.PropertyMap
         public const string DependencyTypeName = "DependencyTypeName";
         public const string Type = "Type";
         public const string StartTime = "StartTime";
+        public const string Id = "Id";
     }
 }
