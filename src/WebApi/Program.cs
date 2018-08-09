@@ -3,7 +3,6 @@ using System;
 using System.Fabric;
 using System.Threading;
 using Microsoft.Extensions.Logging;
-using Serilog.Context;
 using ServiceFabric.Logging;
 using ServiceFabric.Logging.Extensions;
 

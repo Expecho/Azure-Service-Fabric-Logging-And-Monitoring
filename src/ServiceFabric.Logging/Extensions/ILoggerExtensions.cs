@@ -76,7 +76,7 @@ namespace ServiceFabric.Logging.Extensions
             DateTime started, TimeSpan duration, bool success, ActorId actorId)
         {
             logger.LogInformation(ServiceFabricEvent.ServiceRequest,
-                $"The call to {{{DependencyProperties.Type}}} actor {{{DependencyProperties.DependencyTypeName}}} with id {{{DependencyProperties.Id}}} named {{{DependencyProperties.Name}}} finished in {{{DependencyProperties.DurationInMs}}} ms (success: {{{DependencyProperties.Success}}}) ({{{DependencyProperties.StartTime}}})",
+                $"The call to {{{DependencyProperties.Type}}} actor {{{DependencyProperties.DependencyTypeName}}} with id {{{nameof(ActorId)}}} named {{{DependencyProperties.Name}}} finished in {{{DependencyProperties.DurationInMs}}} ms (success: {{{DependencyProperties.Success}}}) ({{{DependencyProperties.StartTime}}})",
                 "ServiceFabric",
                 service,
                 actorId.ToString(),
