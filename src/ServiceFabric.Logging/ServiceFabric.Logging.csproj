@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <PackageId>ServiceFabric.Logging</PackageId>
-    <PackageVersion>2.0.2</PackageVersion>
+    <PackageVersion>2.0.3</PackageVersion>
     <Authors>Peter Bons</Authors>
     <Description>Provides logging and tracking for Azure Service Fabric services</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
