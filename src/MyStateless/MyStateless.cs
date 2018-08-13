@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.ServiceFabric.Services.Remoting.V2.FabricTransport.Runtime;
 using ServiceFabric.Logging;
+using ServiceFabric.Logging.Extensions;
 using ServiceFabric.Remoting.CustomHeaders;
 using ServiceFabric.Remoting.CustomHeaders.ReliableServices;
 
@@ -32,6 +33,8 @@ namespace MyStateless
         /// <returns>A collection of listeners.</returns>
         protected override IEnumerable<ServiceInstanceListener> CreateServiceInstanceListeners()
         {
+            _logger.LogStatelessServiceStartedListening<MyStateless>(Context.ServiceName.ToString());
+
             return new[]
             {
                 new ServiceInstanceListener(context =>
@@ -43,7 +46,6 @@ namespace MyStateless
         public async Task<int> CalculateSumAsync(int a, int b)
         {
             var traceId = RemotingContext.GetData(HeaderIdentifiers.TraceId);
-
             _logger.LogTrace($"Hello from inside {nameof(MyStateless)} (traceId {traceId})");
 
             await new HttpClient().GetAsync("http://www.nu.nl");

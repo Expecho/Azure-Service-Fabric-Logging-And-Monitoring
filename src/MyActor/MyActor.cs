@@ -1,10 +1,11 @@
-﻿using System.Threading;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.ServiceFabric.Actors;
 using Microsoft.ServiceFabric.Actors.Runtime;
 using MyActor.Interfaces;
-using ServiceFabric.Logging.Actors;
+using ServiceFabric.Logging;
+using ServiceFabric.Remoting.CustomHeaders;
 
 namespace MyActor
 {
@@ -17,11 +18,13 @@ namespace MyActor
     ///  - None: State is kept in memory only and not replicated.
     /// </remarks>
     [StatePersistence(StatePersistence.Persisted)]
-    internal class MyActor : TimedActor<MyActor>, IMyActor
+    internal class MyActor : Actor, IMyActor
     {
-        public MyActor(ActorService actorService, ActorId actorId, ILogger logger)
-            : base(actorService, actorId, logger)
+        private readonly ILogger _logger;
+
+        public MyActor(ActorService actorService, ActorId actorId, ILogger logger) : base(actorService, actorId)
         {
+            _logger = logger;
         }
 
         protected override Task OnActivateAsync()
@@ -31,19 +34,22 @@ namespace MyActor
             // Any serializable object can be saved in the StateManager.
             // For more information, see https://aka.ms/servicefabricactorsstateserialization
 
-            return this.StateManager.TryAddStateAsync("count", 0);
+            return StateManager.TryAddStateAsync("count", 0);
         }
 
         Task<int> IMyActor.GetCountAsync(CancellationToken cancellationToken)
         {
-            return this.StateManager.GetStateAsync<int>("count", cancellationToken);
+            var traceId = RemotingContext.GetData(HeaderIdentifiers.TraceId);
+            _logger.LogInformation($"Hello from inside {nameof(MyActor)} (traceId {traceId})");
+
+            return StateManager.GetStateAsync<int>("count", cancellationToken);
         }
 
         Task IMyActor.SetCountAsync(int count, CancellationToken cancellationToken)
         {
             // Requests are not guaranteed to be processed in order nor at most once.
             // The update function here verifies that the incoming count is greater than the current count to preserve order.
-            return this.StateManager.AddOrUpdateStateAsync("count", count, (key, value) => count > value ? count : value, cancellationToken);
+            return StateManager.AddOrUpdateStateAsync("count", count, (key, value) => count > value ? count : value, cancellationToken);
         }
     }
 }

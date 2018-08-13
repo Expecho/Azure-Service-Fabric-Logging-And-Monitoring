@@ -1,9 +1,8 @@
-﻿using Microsoft.ServiceFabric.Services.Runtime;
+using Microsoft.ServiceFabric.Services.Runtime;
 using System;
 using System.Fabric;
 using System.Threading;
 using Microsoft.Extensions.Logging;
-using Serilog.Context;
 using ServiceFabric.Logging;
 using ServiceFabric.Logging.Extensions;
 
@@ -35,15 +34,6 @@ namespace WebApi
                 ServiceRuntime.RegisterServiceAsync("WebApiType",
                     context =>
                     {
-                        LogContext.PushProperty(nameof(context.ServiceTypeName), context.ServiceTypeName);
-                        LogContext.PushProperty(nameof(context.ServiceName), context.ServiceName);
-                        LogContext.PushProperty(nameof(context.PartitionId), context.PartitionId);
-                        LogContext.PushProperty(nameof(context.ReplicaOrInstanceId), context.ReplicaOrInstanceId);
-                        LogContext.PushProperty(nameof(context.NodeContext.NodeName), context.NodeContext.NodeName);
-                        LogContext.PushProperty(nameof(context.CodePackageActivationContext.ApplicationName), context.CodePackageActivationContext.ApplicationName);
-                        LogContext.PushProperty(nameof(context.CodePackageActivationContext.ApplicationTypeName), context.CodePackageActivationContext.ApplicationTypeName);
-                        LogContext.PushProperty(nameof(context.CodePackageActivationContext.CodePackageVersion), context.CodePackageActivationContext.CodePackageVersion);
-                        
                         var loggerFactory = new LoggerFactoryBuilder(context).CreateLoggerFactory(applicationInsightsKey);
                         logger = loggerFactory.CreateLogger<WebApi>();
 
