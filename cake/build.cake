@@ -26,7 +26,7 @@ Task("clean")
         if(BuildSystem.IsLocalBuild)
         {
             CleanDirectories(GetDirectories(@"..\src\**\obj"));
-            CleanDirectories(GetDirectories(@"..\src\**\bin"));
+            CleanDirectories(GetDirectories(@"..\src\**in"));
         }
     });
 
@@ -45,7 +45,8 @@ Task("build")
             NoRestore = false,
             DiagnosticOutput = true,
             MSBuildSettings = msBuildSettings,
-            Verbosity = DotNetCoreVerbosity.Minimal
+            Verbosity = DotNetCoreVerbosity.Minimal,
+            Framework = "net9.0"
         });
     });
 
@@ -58,7 +59,8 @@ Task("package")
             Configuration = configuration,
             NoRestore = true,
             NoBuild = true,
-            OutputDirectory = artifactsDirectory
+            OutputDirectory = artifactsDirectory,
+            Framework = "net9.0"
         };
 
         DotNetCorePack(packageProject, settings);
